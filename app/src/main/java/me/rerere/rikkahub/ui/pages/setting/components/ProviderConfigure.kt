@@ -126,7 +126,7 @@ private fun ColumnScope.ProviderConfigureOpenAI(
     )
 
     OutlinedTextField(
-        value = provider.apiKey,
+        value = if (provider.multiKeyEnabled) "" else provider.apiKey,
         onValueChange = {
             onEdit(provider.copy(apiKey = it.trim()))
         },
@@ -135,6 +135,10 @@ private fun ColumnScope.ProviderConfigureOpenAI(
         },
         modifier = Modifier.fillMaxWidth(),
         maxLines = 3,
+        enabled = !provider.multiKeyEnabled,
+        placeholder = if (provider.multiKeyEnabled) {
+            { Text(stringResource(id = R.string.setting_provider_page_api_key_disabled_by_multi_key)) }
+        } else null
     )
 
     OutlinedTextField(
@@ -215,14 +219,18 @@ private fun ColumnScope.ProviderConfigureClaude(
     )
 
     OutlinedTextField(
-        value = provider.apiKey,
+        value = if (provider.multiKeyEnabled) "" else provider.apiKey,
         onValueChange = {
             onEdit(provider.copy(apiKey = it.trim()))
         },
         label = {
             Text(stringResource(id = R.string.setting_provider_page_api_key))
         },
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        enabled = !provider.multiKeyEnabled,
+        placeholder = if (provider.multiKeyEnabled) {
+            { Text(stringResource(id = R.string.setting_provider_page_api_key_disabled_by_multi_key)) }
+        } else null
     )
 
     OutlinedTextField(
@@ -281,7 +289,7 @@ private fun ColumnScope.ProviderConfigureGoogle(
 
     if (!provider.vertexAI) {
         OutlinedTextField(
-            value = provider.apiKey,
+            value = if (provider.multiKeyEnabled) "" else provider.apiKey,
             onValueChange = {
                 onEdit(provider.copy(apiKey = it.trim()))
             },
@@ -290,6 +298,10 @@ private fun ColumnScope.ProviderConfigureGoogle(
             },
             modifier = Modifier.fillMaxWidth(),
             maxLines = 3,
+            enabled = !provider.multiKeyEnabled,
+            placeholder = if (provider.multiKeyEnabled) {
+                { Text(stringResource(id = R.string.setting_provider_page_api_key_disabled_by_multi_key)) }
+            } else null
         )
 
         OutlinedTextField(

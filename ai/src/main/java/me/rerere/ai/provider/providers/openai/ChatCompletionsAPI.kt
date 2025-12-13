@@ -36,6 +36,7 @@ import me.rerere.ai.ui.UIMessageAnnotation
 import me.rerere.ai.ui.UIMessageChoice
 import me.rerere.ai.ui.UIMessagePart
 import me.rerere.ai.util.KeyRoulette
+import me.rerere.ai.util.getEffectiveApiKey
 import me.rerere.ai.util.configureClientWithProxy
 import me.rerere.ai.util.configureReferHeaders
 import me.rerere.ai.util.encodeBase64
@@ -82,7 +83,12 @@ class ChatCompletionsAPI(
             .url("${providerSetting.baseUrl}${providerSetting.chatCompletionsPath}")
             .headers(params.customHeaders.toHeaders())
             .post(json.encodeToString(requestBody).toRequestBody("application/json".toMediaType()))
-            .addHeader("Authorization", "Bearer ${keyRoulette.next(providerSetting.apiKey)}")
+            .addHeader("Authorization", "Bearer ${keyRoulette.getEffectiveApiKey(
+                apiKey = providerSetting.apiKey,
+                apiKeys = providerSetting.apiKeys,
+                keyManagement = providerSetting.keyManagement,
+                multiKeyEnabled = providerSetting.multiKeyEnabled
+            )}")
             .configureReferHeaders(providerSetting.baseUrl)
             .build()
 
@@ -141,7 +147,12 @@ class ChatCompletionsAPI(
             .url("${providerSetting.baseUrl}${providerSetting.chatCompletionsPath}")
             .headers(params.customHeaders.toHeaders())
             .post(json.encodeToString(requestBody).toRequestBody("application/json".toMediaType()))
-            .addHeader("Authorization", "Bearer ${keyRoulette.next(providerSetting.apiKey)}")
+            .addHeader("Authorization", "Bearer ${keyRoulette.getEffectiveApiKey(
+                apiKey = providerSetting.apiKey,
+                apiKeys = providerSetting.apiKeys,
+                keyManagement = providerSetting.keyManagement,
+                multiKeyEnabled = providerSetting.multiKeyEnabled
+            )}")
             .addHeader("Content-Type", "application/json")
             .configureReferHeaders(providerSetting.baseUrl)
             .build()

@@ -22,6 +22,7 @@ import me.rerere.ai.ui.ImageGenerationResult
 import me.rerere.ai.ui.MessageChunk
 import me.rerere.ai.ui.UIMessage
 import me.rerere.ai.util.KeyRoulette
+import me.rerere.ai.util.getEffectiveApiKey
 import me.rerere.ai.util.configureClientWithProxy
 import me.rerere.ai.util.json
 import me.rerere.ai.util.mergeCustomBody
@@ -46,7 +47,12 @@ class OpenAIProvider(
 
     override suspend fun listModels(providerSetting: ProviderSetting.OpenAI): List<Model> =
         withContext(Dispatchers.IO) {
-            val key = keyRoulette.next(providerSetting.apiKey)
+            val key = keyRoulette.getEffectiveApiKey(
+                apiKey = providerSetting.apiKey,
+                apiKeys = providerSetting.apiKeys,
+                keyManagement = providerSetting.keyManagement,
+                multiKeyEnabled = providerSetting.multiKeyEnabled
+            )
             val request = Request.Builder()
                 .url("${providerSetting.baseUrl}/models")
                 .addHeader("Authorization", "Bearer $key")
@@ -75,7 +81,12 @@ class OpenAIProvider(
         }
 
     override suspend fun getBalance(providerSetting: ProviderSetting.OpenAI): String = withContext(Dispatchers.IO) {
-        val key = keyRoulette.next(providerSetting.apiKey)
+        val key = keyRoulette.getEffectiveApiKey(
+            apiKey = providerSetting.apiKey,
+            apiKeys = providerSetting.apiKeys,
+            keyManagement = providerSetting.keyManagement,
+            multiKeyEnabled = providerSetting.multiKeyEnabled
+        )
         val url = if (providerSetting.balanceOption.apiPath.startsWith("http")) {
             providerSetting.balanceOption.apiPath
         } else {
@@ -146,7 +157,12 @@ class OpenAIProvider(
             "Expected OpenAI provider setting"
         }
 
-        val key = keyRoulette.next(providerSetting.apiKey)
+        val key = keyRoulette.getEffectiveApiKey(
+            apiKey = providerSetting.apiKey,
+            apiKeys = providerSetting.apiKeys,
+            keyManagement = providerSetting.keyManagement,
+            multiKeyEnabled = providerSetting.multiKeyEnabled
+        )
 
         val requestBody = json.encodeToString(
             buildJsonObject {

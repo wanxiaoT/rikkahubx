@@ -71,6 +71,7 @@ import me.rerere.rikkahub.ui.pages.setting.SettingProviderDetailPage
 import me.rerere.rikkahub.ui.pages.setting.SettingProviderPage
 import me.rerere.rikkahub.ui.pages.setting.SettingSearchPage
 import me.rerere.rikkahub.ui.pages.setting.SettingTTSPage
+import me.rerere.rikkahub.ui.pages.setting.SettingMultiKeyPage
 import me.rerere.rikkahub.ui.pages.share.handler.ShareHandlerPage
 import me.rerere.rikkahub.ui.pages.translator.TranslatorPage
 import me.rerere.rikkahub.ui.pages.webview.WebViewPage
@@ -262,6 +263,12 @@ class RouteActivity : ComponentActivity() {
                         SettingProviderDetailPage(id = id)
                     }
 
+                    composable<Screen.SettingMultiKey> {
+                        val route = it.toRoute<Screen.SettingMultiKey>()
+                        val id = Uuid.parse(route.providerId)
+                        SettingMultiKeyPage(providerId = id)
+                    }
+
                     composable<Screen.SettingModels> {
                         SettingModelPage()
                     }
@@ -341,6 +348,9 @@ sealed interface Screen {
 
     @Serializable
     data class SettingProviderDetail(val providerId: String) : Screen
+
+    @Serializable
+    data class SettingMultiKey(val providerId: String) : Screen
 
     @Serializable
     data object SettingModels : Screen

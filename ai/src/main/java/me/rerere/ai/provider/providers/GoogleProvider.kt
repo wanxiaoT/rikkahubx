@@ -44,6 +44,7 @@ import me.rerere.ai.ui.UIMessageAnnotation
 import me.rerere.ai.ui.UIMessageChoice
 import me.rerere.ai.ui.UIMessagePart
 import me.rerere.ai.util.KeyRoulette
+import me.rerere.ai.util.getEffectiveApiKey
 import me.rerere.ai.util.configureClientWithProxy
 import me.rerere.ai.util.configureReferHeaders
 import me.rerere.ai.util.encodeBase64
@@ -78,7 +79,12 @@ class GoogleProvider(private val client: OkHttpClient) : Provider<ProviderSettin
 
     private fun buildUrl(providerSetting: ProviderSetting.Google, path: String): HttpUrl {
         return if (!providerSetting.vertexAI) {
-            val key = keyRoulette.next(providerSetting.apiKey)
+            val key = keyRoulette.getEffectiveApiKey(
+                apiKey = providerSetting.apiKey,
+                apiKeys = providerSetting.apiKeys,
+                keyManagement = providerSetting.keyManagement,
+                multiKeyEnabled = providerSetting.multiKeyEnabled
+            )
             "${providerSetting.baseUrl}/$path".toHttpUrl()
                 .newBuilder()
                 .addQueryParameter("key", key)

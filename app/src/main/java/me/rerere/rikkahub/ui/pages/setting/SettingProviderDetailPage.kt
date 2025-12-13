@@ -1,5 +1,7 @@
 package me.rerere.rikkahub.ui.pages.setting
 
+import me.rerere.rikkahub.Screen
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -80,6 +82,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.composables.icons.lucide.Boxes
 import com.composables.icons.lucide.Cable
 import com.composables.icons.lucide.ChevronDown
+import com.composables.icons.lucide.Key
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Network
 import com.composables.icons.lucide.Plus
@@ -297,6 +300,14 @@ private fun SettingProviderConfigPage(
             )
             ProviderBalanceText(providerSetting = provider, style = MaterialTheme.typography.labelSmall)
         }
+
+        // 多 Key 管理入口
+        MultiKeyManagementCard(
+            provider = internalProvider,
+            onToggleMultiKey = { enabled ->
+                internalProvider = internalProvider.setMultiKeyEnabled(enabled)
+            }
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -1765,6 +1776,83 @@ private fun ProviderOverrideSettings(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun MultiKeyManagementCard(
+    provider: ProviderSetting,
+    onToggleMultiKey: (Boolean) -> Unit
+) {
+    val navController = LocalNavController.current
+    val keyCount = provider.apiKeys?.size ?: 0
+    val activeCount = provider.apiKeys?.count { it.isEnabled && it.status == me.rerere.ai.provider.ApiKeyStatus.ACTIVE } ?: 0
+    
+    OutlinedCard(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // 左侧：图标和文字（可点击进入多key管理，但只有开启时才能进入）
+            Surface(
+                onClick = {
+                    if (provider.multiKeyEnabled) {
+                        navController.navigate(Screen.SettingMultiKey(providerId = provider.id.toString()))
+                    }
+                },
+                modifier = Modifier.weight(1f),
+                color = MaterialTheme.colorScheme.surface
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(end = 8.dp)
+                ) {
+                    Icon(
+                        Lucide.Key,
+                        contentDescription = null,
+                        tint = if (provider.multiKeyEnabled) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        }
+                    )
+                    Column {
+                        Text(
+                            text = stringResource(R.string.setting_provider_page_multi_key),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = if (provider.multiKeyEnabled) {
+                                MaterialTheme.colorScheme.onSurface
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            }
+                        )
+                        Text(
+                            text = if (provider.multiKeyEnabled && keyCount > 0) {
+                                "$activeCount / $keyCount keys active"
+                            } else if (provider.multiKeyEnabled) {
+                                stringResource(R.string.setting_provider_page_multi_key_desc)
+                            } else {
+                                stringResource(R.string.setting_provider_page_multi_key_disabled_hint)
+                            },
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+            
+            // 右侧：开关
+            Switch(
+                checked = provider.multiKeyEnabled,
+                onCheckedChange = onToggleMultiKey
+            )
         }
     }
 }

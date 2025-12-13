@@ -21,6 +21,17 @@ RikkaHubX是RikkaHub的独立分支，在RikkaHub的基础上添加了部分修�
 
 [RikkaHubX](https://github.com/wanxiaoT/rikkahubx) By [wanxiaoT](https://github.com/wanxiaoT)
 
+感谢 [Kelivo](https://github.com/Chevey339/kelivo/) 提供的多 Key 管理功能示例代码
+
+文件路径             | 说明
+-------|--------------------
+kelivo-master\lib\core\models\api_keys.dart | 数据模型 - 定义核心数据结构
+kelivo-master\lib\core\services\api_key_manager.dart | 核心服务 - Key 选择逻辑和状态更新
+kelivo-master\lib\features\provider\pages\multi_key_manager_page.dart | UI 页面 - 多 Key 管理界面
+
+
+
+觉得本项目好请点一个⭐Star
 
 ## 📄 许可证
 
