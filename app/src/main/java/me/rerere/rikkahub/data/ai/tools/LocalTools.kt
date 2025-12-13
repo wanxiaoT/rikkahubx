@@ -8,6 +8,8 @@ import android.os.Environment
 import androidx.core.content.ContextCompat
 import com.whl.quickjs.wrapper.QuickJSContext
 import com.whl.quickjs.wrapper.QuickJSObject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonPrimitive
@@ -20,6 +22,8 @@ import kotlinx.serialization.json.put
 import me.rerere.ai.core.InputSchema
 import me.rerere.ai.core.Tool
 import java.io.File
+import java.net.HttpURLConnection
+import java.net.URL
 
 @Serializable
 sealed class LocalToolOption {
@@ -30,6 +34,10 @@ sealed class LocalToolOption {
     @Serializable
     @SerialName("file_system")
     data object FileSystem : LocalToolOption()
+    
+    @Serializable
+    @SerialName("web_fetch")
+    data object WebFetch : LocalToolOption()
 }
 
 class LocalTools(private val context: Context) {
@@ -681,6 +689,183 @@ class LocalTools(private val context: Context) {
             }
         )
     }
+    
+    /**
+     * Web Fetch 工具 - 获取 URL 内容
+     */
+    val webFetchTool by lazy {
+        Tool(
+            name = "web_fetch",
+            description = "Fetch content from a URL. Returns the HTML content, status code, and response headers. Useful for retrieving web page content, API responses, or checking URL availability.",
+            parameters = {
+                InputSchema.Obj(
+                    properties = buildJsonObject {
+                        put("url", buildJsonObject {
+                            put("type", "string")
+                            put("description", "The URL to fetch, must start with http:// or https://")
+                        })
+                        put("method", buildJsonObject {
+                            put("type", "string")
+                            put("description", "HTTP method to use (GET or POST, default: GET)")
+                        })
+                        put("headers", buildJsonObject {
+                            put("type", "string")
+                            put("description", "Custom headers in JSON format, e.g., {\"Authorization\": \"Bearer token\"}")
+                        })
+                        put("body", buildJsonObject {
+                            put("type", "string")
+                            put("description", "Request body for POST requests")
+                        })
+                        put("timeout", buildJsonObject {
+                            put("type", "integer")
+                            put("description", "Connection timeout in milliseconds (default: 10000)")
+                        })
+                        put("extractText", buildJsonObject {
+                            put("type", "boolean")
+                            put("description", "If true, extract plain text from HTML by removing tags (default: false)")
+                        })
+                        put("maxLength", buildJsonObject {
+                            put("type", "integer")
+                            put("description", "Maximum content length to return in characters (default: 50000, max: 100000)")
+                        })
+                    },
+                    required = listOf("url")
+                )
+            },
+            execute = { args ->
+                val urlString = args.jsonObject["url"]?.jsonPrimitive?.contentOrNull
+                val method = args.jsonObject["method"]?.jsonPrimitive?.contentOrNull?.uppercase() ?: "GET"
+                val headersJson = args.jsonObject["headers"]?.jsonPrimitive?.contentOrNull
+                val body = args.jsonObject["body"]?.jsonPrimitive?.contentOrNull
+                val timeout = args.jsonObject["timeout"]?.jsonPrimitive?.contentOrNull?.toIntOrNull() ?: 10000
+                val extractText = args.jsonObject["extractText"]?.jsonPrimitive?.contentOrNull?.toBoolean() ?: false
+                val maxLength = (args.jsonObject["maxLength"]?.jsonPrimitive?.contentOrNull?.toIntOrNull() ?: 50000).coerceIn(1, 100000)
+                
+                buildJsonObject {
+                    if (urlString.isNullOrBlank()) {
+                        put("success", JsonPrimitive(false))
+                        put("error", JsonPrimitive("URL is required"))
+                    } else if (!urlString.startsWith("http://") && !urlString.startsWith("https://")) {
+                        put("success", JsonPrimitive(false))
+                        put("error", JsonPrimitive("URL must start with http:// or https://"))
+                    } else if (method != "GET" && method != "POST") {
+                        put("success", JsonPrimitive(false))
+                        put("error", JsonPrimitive("Only GET and POST methods are supported"))
+                    } else {
+                        try {
+                            val url = URL(urlString)
+                            val connection = url.openConnection() as HttpURLConnection
+                            
+                            connection.requestMethod = method
+                            connection.connectTimeout = timeout
+                            connection.readTimeout = timeout
+                            connection.setRequestProperty("User-Agent", "RikkaHub/1.0 (Android)")
+                            connection.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                            connection.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8")
+                            
+                            // 解析并设置自定义 headers
+                            if (!headersJson.isNullOrBlank()) {
+                                try {
+                                    val customHeaders = kotlinx.serialization.json.Json.parseToJsonElement(headersJson).jsonObject
+                                    customHeaders.forEach { (key, value) ->
+                                        connection.setRequestProperty(key, value.jsonPrimitive.contentOrNull ?: "")
+                                    }
+                                } catch (e: Exception) {
+                                    // 忽略无效的 headers JSON
+                                }
+                            }
+                            
+                            // 处理 POST 请求体
+                            if (method == "POST" && !body.isNullOrBlank()) {
+                                connection.doOutput = true
+                                connection.outputStream.use { os ->
+                                    os.write(body.toByteArray(Charsets.UTF_8))
+                                }
+                            }
+                            
+                            val responseCode = connection.responseCode
+                            val responseMessage = connection.responseMessage
+                            val contentType = connection.contentType ?: "unknown"
+                            val contentLength = connection.contentLength
+                            
+                            // 获取响应头
+                            val responseHeaders = buildJsonObject {
+                                connection.headerFields.forEach { (key, values) ->
+                                    if (key != null && values.isNotEmpty()) {
+                                        put(key, JsonPrimitive(values.joinToString(", ")))
+                                    }
+                                }
+                            }
+                            
+                            // 读取响应内容
+                            val inputStream = if (responseCode >= 400) {
+                                connection.errorStream
+                            } else {
+                                connection.inputStream
+                            }
+                            
+                            var content = inputStream?.bufferedReader()?.use { it.readText() } ?: ""
+                            
+                            // 提取纯文本（移除 HTML 标签）
+                            if (extractText && content.isNotEmpty()) {
+                                content = content
+                                    .replace(Regex("<script[^>]*>[\\s\\S]*?</script>", RegexOption.IGNORE_CASE), "")
+                                    .replace(Regex("<style[^>]*>[\\s\\S]*?</style>", RegexOption.IGNORE_CASE), "")
+                                    .replace(Regex("<[^>]+>"), " ")
+                                    .replace(Regex("&nbsp;"), " ")
+                                    .replace(Regex("&amp;"), "&")
+                                    .replace(Regex("&lt;"), "<")
+                                    .replace(Regex("&gt;"), ">")
+                                    .replace(Regex("&quot;"), "\"")
+                                    .replace(Regex("&#\\d+;")) { match ->
+                                        try {
+                                            val code = match.value.substring(2, match.value.length - 1).toInt()
+                                            code.toChar().toString()
+                                        } catch (e: Exception) {
+                                            match.value
+                                        }
+                                    }
+                                    .replace(Regex("\\s+"), " ")
+                                    .trim()
+                            }
+                            
+                            // 截断过长的内容
+                            val truncated = content.length > maxLength
+                            if (truncated) {
+                                content = content.take(maxLength) + "...[truncated]"
+                            }
+                            
+                            connection.disconnect()
+                            
+                            put("success", JsonPrimitive(true))
+                            put("url", JsonPrimitive(urlString))
+                            put("statusCode", JsonPrimitive(responseCode))
+                            put("statusMessage", JsonPrimitive(responseMessage ?: ""))
+                            put("contentType", JsonPrimitive(contentType))
+                            put("contentLength", JsonPrimitive(contentLength))
+                            put("headers", responseHeaders)
+                            put("content", JsonPrimitive(content))
+                            put("truncated", JsonPrimitive(truncated))
+                            put("extractedText", JsonPrimitive(extractText))
+                            
+                        } catch (e: java.net.SocketTimeoutException) {
+                            put("success", JsonPrimitive(false))
+                            put("error", JsonPrimitive("Connection timeout: ${e.message}"))
+                        } catch (e: java.net.UnknownHostException) {
+                            put("success", JsonPrimitive(false))
+                            put("error", JsonPrimitive("Unknown host: ${e.message}"))
+                        } catch (e: java.io.IOException) {
+                            put("success", JsonPrimitive(false))
+                            put("error", JsonPrimitive("IO error: ${e.message}"))
+                        } catch (e: Exception) {
+                            put("success", JsonPrimitive(false))
+                            put("error", JsonPrimitive("Failed to fetch URL: ${e.message}"))
+                        }
+                    }
+                }
+            }
+        )
+    }
 
     fun getTools(options: List<LocalToolOption>): List<Tool> {
         val tools = mutableListOf<Tool>()
@@ -695,6 +880,9 @@ class LocalTools(private val context: Context) {
             tools.add(fileDeleteTool)
             tools.add(fileMoveRenameTool)
             tools.add(createDirectoryTool)
+        }
+        if (options.contains(LocalToolOption.WebFetch)) {
+            tools.add(webFetchTool)
         }
         return tools
     }

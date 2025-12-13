@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.composables.icons.lucide.Check
 import com.composables.icons.lucide.FolderOpen
+import com.composables.icons.lucide.Globe
 import com.composables.icons.lucide.Lucide
 import me.rerere.rikkahub.R
 import me.rerere.rikkahub.data.ai.tools.LocalToolOption
@@ -73,6 +74,72 @@ fun AssistantLocalToolSubPage(
         FileSystemToolCard(
             assistant = assistant,
             onUpdate = onUpdate
+        )
+        
+        // Web Fetch 工具卡片
+        WebFetchToolCard(
+            assistant = assistant,
+            onUpdate = onUpdate
+        )
+    }
+}
+
+@Composable
+private fun WebFetchToolCard(
+    assistant: Assistant,
+    onUpdate: (Assistant) -> Unit
+) {
+    val isEnabled = assistant.localTools.contains(LocalToolOption.WebFetch)
+    
+    Card {
+        FormItem(
+            modifier = Modifier.padding(8.dp),
+            label = {
+                Text(stringResource(R.string.assistant_page_local_tools_web_fetch_title))
+            },
+            description = {
+                Text(stringResource(R.string.assistant_page_local_tools_web_fetch_desc))
+            },
+            tail = {
+                Switch(
+                    checked = isEnabled,
+                    onCheckedChange = { enabled ->
+                        val newLocalTools = if (enabled) {
+                            assistant.localTools + LocalToolOption.WebFetch
+                        } else {
+                            assistant.localTools - LocalToolOption.WebFetch
+                        }
+                        onUpdate(assistant.copy(localTools = newLocalTools))
+                    }
+                )
+            },
+            content = {
+                if (isEnabled) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Lucide.Globe,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Text(
+                                text = stringResource(R.string.assistant_page_local_tools_web_fetch_hint),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                } else {
+                    null
+                }
+            }
         )
     }
 }

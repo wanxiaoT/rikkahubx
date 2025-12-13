@@ -191,6 +191,9 @@
   <string name="assistant_page_local_tools_file_system_permission_granted">All Files Access permission granted</string>
   <string name="assistant_page_local_tools_file_system_permission_hint">To access all files on the device, you need to grant \"All Files Access\" permission. Without this permission, only media files can be accessed.</string>
   <string name="assistant_page_local_tools_file_system_grant_permission">Grant All Files Access</string>
+  <string name="assistant_page_local_tools_web_fetch_title">Web Fetch</string>
+  <string name="assistant_page_local_tools_web_fetch_desc">Fetch content from URLs. Supports GET/POST requests, returns HTML content, status codes, and response headers.</string>
+  <string name="assistant_page_local_tools_web_fetch_hint">Requires network permission. Can be used to retrieve web page content, API responses, or check URL availability.</string>
 
   <!-- Custom Headers and Bodies -->
   <string name="assistant_page_custom_headers">Custom Headers</string>

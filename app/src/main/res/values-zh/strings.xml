@@ -59,6 +59,9 @@
   <string name="assistant_page_local_tools_file_system_permission_granted">已获得所有文件访问权限</string>
   <string name="assistant_page_local_tools_file_system_permission_hint">要访问设备上的所有文件，需要授予「所有文件访问权限」。如果没有此权限，只能访问媒体文件。</string>
   <string name="assistant_page_local_tools_file_system_grant_permission">授予所有文件访问权限</string>
+  <string name="assistant_page_local_tools_web_fetch_title">网页获取</string>
+  <string name="assistant_page_local_tools_web_fetch_desc">从 URL 获取网页内容。支持 GET/POST 请求，可获取 HTML 内容、状态码和响应头信息。</string>
+  <string name="assistant_page_local_tools_web_fetch_hint">需要网络权限。可用于获取网页内容、API 响应或检查 URL 可用性。</string>
   <string name="assistant_page_manage_memory">管理记忆 (%d条)</string>
   <string name="assistant_page_manage_memory_title">管理记忆</string>
   <string name="assistant_page_max_tokens">最大Token数</string>
