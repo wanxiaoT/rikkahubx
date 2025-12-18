@@ -35,6 +35,10 @@
   <string name="assistant_page_chat_model_desc">アシスタントのデフォルトチャットモデルを設定します。設定しない場合は、グローバルデフォルトチャットモデルが使用されます</string>
   <string name="assistant_page_clone">複製</string>
   <string name="assistant_page_confirm">確認</string>
+  <string name="assistant_page_knowledge_bases">ナレッジベース</string>
+  <string name="assistant_page_knowledge_bases_desc">RAGコンテキスト取得用のナレッジベースを選択</string>
+  <string name="assistant_page_knowledge_bases_empty">ナレッジベースがありません。設定 > ナレッジベースで作成してください。</string>
+  <string name="assistant_page_knowledge_bases_selected">%d 件選択済み</string>
   <string name="assistant_page_context_message_count">コンテキストメッセージサイズ: %d</string>
   <string name="assistant_page_context_message_desc">モデルに送信される履歴メッセージの数を制御します。この数を超えるメッセージは無視され、最新のN個のメッセージのみが保持されます。これによりトークンを節約できます</string>
   <string name="assistant_page_context_message_size">コンテキストメッセージサイズ</string>
@@ -670,4 +674,45 @@
   <string name="video">動画</string>
   <string name="web_search_disabled">ウェブ検索が無効になりました</string>
   <string name="web_search_enabled">ウェブ検索が有効になりました</string>
+
+  <!-- Knowledge Base -->
+  <string name="knowledge_base">ナレッジベース</string>
+  <string name="knowledge_base_desc">RAGナレッジベースの管理</string>
+  <string name="knowledge_base_empty">ナレッジベースがありません</string>
+  <string name="knowledge_base_empty_hint">+をクリックして新しいナレッジベースを作成</string>
+  <string name="create_knowledge_base">ナレッジベースを作成</string>
+  <string name="delete_knowledge_base">ナレッジベースを削除</string>
+  <string name="delete_knowledge_base_confirm">「%1$s」を削除してもよろしいですか？この操作は取り消せません。</string>
+  <string name="knowledge_base_created">ナレッジベースが作成されました</string>
+  <string name="knowledge_base_deleted">ナレッジベースが削除されました</string>
+  <string name="knowledge_base_name_hint">ナレッジベース名を入力</string>
+  <string name="knowledge_base_description_hint">説明を入力（任意）</string>
+  <string name="embedding_provider">埋め込みプロバイダー</string>
+  <string name="embedding_model">埋め込みモデル</string>
+  <string name="knowledge_item_count">%1$d 件</string>
+  <string name="process_all">処理 (%1$d)</string>
+  <string name="all">すべて</string>
+  <string name="files">ファイル</string>
+  <string name="notes">ノート</string>
+  <string name="urls">URL</string>
+  <string name="no_items">アイテムがありません</string>
+  <string name="add_file">ファイルを追加</string>
+  <string name="add_note">ノートを追加</string>
+  <string name="add_url">URLを追加</string>
+  <string name="file_added">ファイルが追加されました</string>
+  <string name="note_added">ノートが追加されました</string>
+  <string name="url_added">URLが追加されました</string>
+  <string name="status_pending">保留中</string>
+  <string name="status_processing">処理中</string>
+  <string name="status_completed">完了</string>
+  <string name="status_failed">失敗</string>
+  <string name="search_knowledge_base">ナレッジベースを検索</string>
+  <string name="search_query_hint">検索クエリを入力</string>
+  <string name="search_results">%1$d 件の結果</string>
+  <string name="name">名前</string>
+  <string name="content">内容</string>
+  <string name="description">説明</string>
+  <string name="optional">任意</string>
+  <string name="create">作成</string>
+  <string name="close">閉じる</string>
 </resources>

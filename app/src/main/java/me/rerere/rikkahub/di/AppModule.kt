@@ -10,6 +10,7 @@ import me.rerere.rikkahub.AppScope
 import me.rerere.rikkahub.data.ai.AILoggingManager
 import me.rerere.rikkahub.data.ai.tools.LocalTools
 import me.rerere.rikkahub.service.ChatService
+import me.rerere.rikkahub.service.KnowledgeService
 import me.rerere.rikkahub.utils.EmojiData
 import me.rerere.rikkahub.utils.EmojiUtils
 import me.rerere.rikkahub.utils.JsonInstant
@@ -71,7 +72,17 @@ val appModule = module {
             templateTransformer = get(),
             providerManager = get(),
             localTools = get(),
-            mcpManager = get()
+            mcpManager = get(),
+            knowledgeService = get()
+        )
+    }
+
+    single {
+        KnowledgeService(
+            context = get(),
+            repository = get(),
+            settingsStore = get(),
+            client = get()
         )
     }
 }

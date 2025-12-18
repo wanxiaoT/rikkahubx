@@ -35,6 +35,10 @@
   <string name="assistant_page_chat_model_desc">Установить модель чата по умолчанию для ассистента. Если не задано, будет использована глобальная модель чата по умолчанию</string>
   <string name="assistant_page_clone">Клонировать</string>
   <string name="assistant_page_confirm">Подтвердить</string>
+  <string name="assistant_page_knowledge_bases">Базы знаний</string>
+  <string name="assistant_page_knowledge_bases_desc">Выберите базы знаний для контекстного поиска RAG</string>
+  <string name="assistant_page_knowledge_bases_empty">Нет баз знаний. Создайте их в Настройки > Базы знаний.</string>
+  <string name="assistant_page_knowledge_bases_selected">Выбрано: %d</string>
   <string name="assistant_page_context_message_count">Размер контекстных сообщений: %d</string>
   <string name="assistant_page_context_message_desc">Управляет количеством исторических сообщений, отправляемых модели в качестве контекста. Сообщения, превышающие это число, будут игнорироваться; будут сохранены только последние N сообщений, что позволяет экономить токены</string>
   <string name="assistant_page_context_message_size">Размер контекстного сообщения</string>
@@ -670,4 +674,45 @@
   <string name="video">Видео</string>
   <string name="web_search_disabled">Веб-поиск отключён</string>
   <string name="web_search_enabled">Веб-поиск включён</string>
+
+  <!-- Knowledge Base -->
+  <string name="knowledge_base">База знаний</string>
+  <string name="knowledge_base_desc">Управление базами знаний RAG</string>
+  <string name="knowledge_base_empty">Нет баз знаний</string>
+  <string name="knowledge_base_empty_hint">Нажмите + чтобы создать новую базу знаний</string>
+  <string name="create_knowledge_base">Создать базу знаний</string>
+  <string name="delete_knowledge_base">Удалить базу знаний</string>
+  <string name="delete_knowledge_base_confirm">Вы уверены, что хотите удалить \"%1$s\"? Это действие нельзя отменить.</string>
+  <string name="knowledge_base_created">База знаний создана</string>
+  <string name="knowledge_base_deleted">База знаний удалена</string>
+  <string name="knowledge_base_name_hint">Введите название базы знаний</string>
+  <string name="knowledge_base_description_hint">Введите описание (необязательно)</string>
+  <string name="embedding_provider">Провайдер эмбеддингов</string>
+  <string name="embedding_model">Модель эмбеддингов</string>
+  <string name="knowledge_item_count">%1$d элементов</string>
+  <string name="process_all">Обработать (%1$d)</string>
+  <string name="all">Все</string>
+  <string name="files">Файлы</string>
+  <string name="notes">Заметки</string>
+  <string name="urls">URL</string>
+  <string name="no_items">Нет элементов</string>
+  <string name="add_file">Добавить файл</string>
+  <string name="add_note">Добавить заметку</string>
+  <string name="add_url">Добавить URL</string>
+  <string name="file_added">Файл добавлен</string>
+  <string name="note_added">Заметка добавлена</string>
+  <string name="url_added">URL добавлен</string>
+  <string name="status_pending">Ожидание</string>
+  <string name="status_processing">Обработка</string>
+  <string name="status_completed">Завершено</string>
+  <string name="status_failed">Ошибка</string>
+  <string name="search_knowledge_base">Поиск по базе знаний</string>
+  <string name="search_query_hint">Введите поисковый запрос</string>
+  <string name="search_results">Найдено %1$d результатов</string>
+  <string name="name">Название</string>
+  <string name="content">Содержимое</string>
+  <string name="description">Описание</string>
+  <string name="optional">необязательно</string>
+  <string name="create">Создать</string>
+  <string name="close">Закрыть</string>
 </resources>

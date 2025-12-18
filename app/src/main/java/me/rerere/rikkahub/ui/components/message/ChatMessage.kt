@@ -112,7 +112,7 @@ fun ChatMessage(
     onTranslate: ((UIMessage, Locale) -> Unit)? = null,
     onClearTranslation: (UIMessage) -> Unit = {},
 ) {
-    val message = node.messages[node.selectIndex]
+    val message = node.safeCurrentMessage
     val chatMessages = conversation.currentMessages
     val messageIndex = chatMessages.indexOf(message)
     val lastMessage = messageIndex == chatMessages.lastIndex

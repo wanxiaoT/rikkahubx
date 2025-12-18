@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.composables.icons.lucide.BadgeInfo
+import com.composables.icons.lucide.BookOpen
 import com.composables.icons.lucide.Boxes
 import com.composables.icons.lucide.Database
 import com.composables.icons.lucide.Drama
@@ -52,6 +53,7 @@ import com.composables.icons.lucide.Monitor
 import com.composables.icons.lucide.Palette
 import com.composables.icons.lucide.Share2
 import com.composables.icons.lucide.SunMoon
+import com.composables.icons.lucide.ScrollText
 import com.composables.icons.lucide.Terminal
 import com.composables.icons.lucide.Volume2
 import me.rerere.rikkahub.R
@@ -229,6 +231,26 @@ fun SettingPage(vm: SettingVM = koinViewModel()) {
                     description = { Text(stringResource(R.string.setting_page_mcp_desc)) },
                     icon = { Icon(Lucide.Terminal, "MCP") },
                     link = Screen.SettingMcp
+                )
+            }
+
+            item {
+                SettingItem(
+                    navController = navController,
+                    title = { Text(stringResource(R.string.knowledge_base)) },
+                    description = { Text(stringResource(R.string.knowledge_base_desc)) },
+                    icon = { Icon(Lucide.BookOpen, "Knowledge Base") },
+                    link = Screen.Knowledge
+                )
+            }
+
+            item {
+                SettingItem(
+                    navController = navController,
+                    title = { Text(stringResource(R.string.setting_page_logcat)) },
+                    description = { Text(stringResource(R.string.setting_page_logcat_desc)) },
+                    icon = { Icon(Lucide.ScrollText, "Logcat") },
+                    link = Screen.SettingLogcat
                 )
             }
 

@@ -257,20 +257,20 @@ private fun SharedTransitionScope.ChatListNormal(
                         ChatMessage(
                             node = node,
                             conversation = conversation,
-                            model = node.currentMessage.modelId?.let { settings.findModelById(it) },
+                            model = node.safeCurrentMessage.modelId?.let { settings.findModelById(it) },
                             assistant = settings.getAssistantById(conversation.assistantId),
                             loading = loading && index == conversation.messageNodes.lastIndex,
                             onRegenerate = {
-                                onRegenerate(node.currentMessage)
+                                onRegenerate(node.safeCurrentMessage)
                             },
                             onEdit = {
-                                onEdit(node.currentMessage)
+                                onEdit(node.safeCurrentMessage)
                             },
                             onFork = {
-                                onForkMessage(node.currentMessage)
+                                onForkMessage(node.safeCurrentMessage)
                             },
                             onDelete = {
-                                onDelete(node.currentMessage)
+                                onDelete(node.safeCurrentMessage)
                             },
                             onShare = {
                                 selecting = true  // 使用 CoroutineScope 延迟状态更新
@@ -401,7 +401,7 @@ private fun SharedTransitionScope.ChatListNormal(
                 },
                 conversation = conversation,
                 selectedMessages = conversation.messageNodes.filter { it.id in selectedItems }
-                    .map { it.currentMessage }
+                    .map { it.safeCurrentMessage }
             )
 
             val captureProgress = LocalScrollCaptureInProgress.current
@@ -507,7 +507,7 @@ private fun SharedTransitionScope.ChatListPreview(
             conversation.messageNodes
         } else {
             conversation.messageNodes.filterIndexed { index, node ->
-                node.currentMessage.toText().contains(searchQuery, ignoreCase = true)
+                node.safeCurrentMessage.toText().contains(searchQuery, ignoreCase = true)
             }
         }
     }
@@ -564,7 +564,7 @@ private fun SharedTransitionScope.ChatListPreview(
                 items = filteredMessages,
                 key = { index, item -> item.id },
             ) { _, node ->
-                val message = node.currentMessage
+                val message = node.safeCurrentMessage
                 val isUser = message.role == me.rerere.ai.core.MessageRole.USER
                 val originalIndex = conversation.messageNodes.indexOf(node)
                 Column(

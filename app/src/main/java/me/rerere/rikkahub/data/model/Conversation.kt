@@ -71,7 +71,7 @@ data class Conversation(
      */
     val currentMessages
         get(): List<UIMessage> {
-            return messageNodes.map { node -> node.messages[node.selectIndex] }
+            return messageNodes.map { node -> node.safeCurrentMessage }
         }
 
     fun getMessageNodeByMessage(message: UIMessage): MessageNode? {
@@ -135,11 +135,32 @@ data class MessageNode(
     val messages: List<UIMessage>,
     val selectIndex: Int = 0,
 ) {
+    /**
+     * 安全获取当前选中的消息，如果索引无效则返回第一条消息
+     * 用于UI渲染等场景，避免因索引越界导致崩溃
+     */
+    val safeCurrentMessage: UIMessage get() {
+        if (messages.isEmpty()) {
+            throw IllegalStateException("MessageNode has no messages")
+        }
+        val safeIndex = selectIndex.coerceIn(messages.indices)
+        return messages[safeIndex]
+    }
+
+    /**
+     * 获取当前选中的消息，如果索引无效则抛出异常
+     * 用于需要严格验证的场景
+     */
     val currentMessage get() = if (messages.isEmpty() || selectIndex !in messages.indices) {
         throw IllegalStateException("MessageNode has no valid current message: messages.size=${messages.size}, selectIndex=$selectIndex")
     } else {
         messages[selectIndex]
     }
+
+    /**
+     * 获取安全的选择索引，确保在有效范围内
+     */
+    val safeSelectIndex: Int get() = if (messages.isEmpty()) 0 else selectIndex.coerceIn(messages.indices)
 
     val role get() = messages.firstOrNull()?.role ?: MessageRole.USER
 

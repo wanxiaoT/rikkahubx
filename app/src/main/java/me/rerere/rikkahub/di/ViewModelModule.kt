@@ -8,6 +8,7 @@ import me.rerere.rikkahub.ui.pages.debug.DebugVM
 import me.rerere.rikkahub.ui.pages.developer.DeveloperVM
 import me.rerere.rikkahub.ui.pages.history.HistoryVM
 import me.rerere.rikkahub.ui.pages.imggen.ImgGenVM
+import me.rerere.rikkahub.ui.pages.knowledge.KnowledgeVM
 import me.rerere.rikkahub.ui.pages.setting.SettingVM
 import me.rerere.rikkahub.ui.pages.share.handler.ShareHandlerVM
 import me.rerere.rikkahub.ui.pages.translator.TranslatorVM
@@ -36,6 +37,7 @@ val viewModelModule = module {
             id = it.get(),
             settingsStore = get(),
             memoryRepository = get(),
+            knowledgeRepository = get(),
             context = get(),
         )
     }
@@ -49,4 +51,12 @@ val viewModelModule = module {
     viewModelOf(::BackupVM)
     viewModelOf(::ImgGenVM)
     viewModelOf(::DeveloperVM)
+    viewModel<KnowledgeVM> {
+        KnowledgeVM(
+            repository = get(),
+            knowledgeService = get(),
+            settingsStore = get(),
+            context = get(),
+        )
+    }
 }

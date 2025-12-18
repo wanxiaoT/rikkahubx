@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(./gradlew:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)"
     ],
     "deny": []
   }

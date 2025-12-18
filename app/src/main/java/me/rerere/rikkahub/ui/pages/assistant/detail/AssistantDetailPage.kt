@@ -39,6 +39,7 @@ import me.rerere.ai.provider.ProviderSetting
 import me.rerere.rikkahub.R
 import me.rerere.rikkahub.data.ai.mcp.McpServerConfig
 import me.rerere.rikkahub.data.model.Assistant
+import me.rerere.rikkahub.data.model.KnowledgeBase
 import me.rerere.rikkahub.ui.components.ai.McpPicker
 import me.rerere.rikkahub.ui.components.ai.ModelSelector
 import me.rerere.rikkahub.ui.components.ai.ReasoningButton
@@ -68,6 +69,7 @@ fun AssistantDetailPage(id: String) {
     val memories by vm.memories.collectAsStateWithLifecycle()
     val providers by vm.providers.collectAsStateWithLifecycle()
     val tags by vm.tags.collectAsStateWithLifecycle()
+    val knowledgeBases by vm.knowledgeBases.collectAsStateWithLifecycle()
 
     fun onUpdate(assistant: Assistant) {
         vm.update(assistant)
@@ -132,6 +134,7 @@ fun AssistantDetailPage(id: String) {
                             assistant = assistant,
                             providers = providers,
                             tags = tags,
+                            knowledgeBases = knowledgeBases,
                             onUpdate = { onUpdate(it) },
                             vm = vm
                         )
@@ -191,6 +194,7 @@ private fun AssistantBasicSettings(
     assistant: Assistant,
     providers: List<ProviderSetting>,
     tags: List<DataTag>,
+    knowledgeBases: List<KnowledgeBase>,
     onUpdate: (Assistant) -> Unit,
     vm: AssistantDetailVM,
 ) {
@@ -540,6 +544,75 @@ private fun AssistantBasicSettings(
                         }
                     }
                 )
+            }
+        }
+
+        // Knowledge Base Section
+        Card {
+            FormItem(
+                modifier = Modifier.padding(8.dp),
+                label = {
+                    Text(stringResource(R.string.assistant_page_knowledge_bases))
+                },
+                description = {
+                    Text(stringResource(R.string.assistant_page_knowledge_bases_desc))
+                }
+            ) {
+                if (knowledgeBases.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.assistant_page_knowledge_bases_empty),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                } else {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        knowledgeBases.forEach { base ->
+                            val isSelected = assistant.knowledgeBases.contains(base.id)
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = base.name,
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                    base.description?.let {
+                                        Text(
+                                            text = it,
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+                                Switch(
+                                    checked = isSelected,
+                                    onCheckedChange = { checked ->
+                                        val newList = if (checked) {
+                                            assistant.knowledgeBases + base.id
+                                        } else {
+                                            assistant.knowledgeBases - base.id
+                                        }
+                                        onUpdate(assistant.copy(knowledgeBases = newList))
+                                    }
+                                )
+                            }
+                        }
+                        if (assistant.knowledgeBases.isNotEmpty()) {
+                            Text(
+                                text = stringResource(
+                                    R.string.assistant_page_knowledge_bases_selected,
+                                    assistant.knowledgeBases.size
+                                ),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+                }
             }
         }
 

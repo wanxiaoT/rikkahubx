@@ -35,6 +35,7 @@ data class Assistant(
     val localTools: List<LocalToolOption> = emptyList(),
     val background: String? = null,
     val learningMode: Boolean = false,
+    val knowledgeBases: List<Uuid> = emptyList(), // RAG knowledge bases for context retrieval
 )
 
 @Serializable

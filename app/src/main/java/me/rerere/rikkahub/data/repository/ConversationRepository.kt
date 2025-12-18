@@ -154,6 +154,14 @@ class ConversationRepository(
         val messageNodes = JsonInstant
             .decodeFromString<List<MessageNode>>(conversationEntity.nodes)
             .filter { it.messages.isNotEmpty() }
+            .map { node ->
+                // 修正无效的 selectIndex，确保在有效范围内
+                if (node.selectIndex !in node.messages.indices) {
+                    node.copy(selectIndex = node.messages.lastIndex.coerceAtLeast(0))
+                } else {
+                    node
+                }
+            }
         return Conversation(
             id = Uuid.parse(conversationEntity.id),
             title = conversationEntity.title,

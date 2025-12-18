@@ -64,6 +64,7 @@ import me.rerere.rikkahub.ui.pages.menu.MenuPage
 import me.rerere.rikkahub.ui.pages.setting.SettingAboutPage
 import me.rerere.rikkahub.ui.pages.setting.SettingDisplayPage
 import me.rerere.rikkahub.ui.pages.setting.SettingDonatePage
+import me.rerere.rikkahub.ui.pages.setting.SettingLogcatPage
 import me.rerere.rikkahub.ui.pages.setting.SettingMcpPage
 import me.rerere.rikkahub.ui.pages.setting.SettingModelPage
 import me.rerere.rikkahub.ui.pages.setting.SettingPage
@@ -72,6 +73,8 @@ import me.rerere.rikkahub.ui.pages.setting.SettingProviderPage
 import me.rerere.rikkahub.ui.pages.setting.SettingSearchPage
 import me.rerere.rikkahub.ui.pages.setting.SettingTTSPage
 import me.rerere.rikkahub.ui.pages.setting.SettingMultiKeyPage
+import me.rerere.rikkahub.ui.pages.knowledge.KnowledgePage
+import me.rerere.rikkahub.ui.pages.knowledge.KnowledgeDetailPage
 import me.rerere.rikkahub.ui.pages.share.handler.ShareHandlerPage
 import me.rerere.rikkahub.ui.pages.translator.TranslatorPage
 import me.rerere.rikkahub.ui.pages.webview.WebViewPage
@@ -289,6 +292,10 @@ class RouteActivity : ComponentActivity() {
                         SettingMcpPage()
                     }
 
+                    composable<Screen.SettingLogcat> {
+                        SettingLogcatPage()
+                    }
+
                     composable<Screen.SettingDonate> {
                         SettingDonatePage()
                     }
@@ -299,6 +306,15 @@ class RouteActivity : ComponentActivity() {
 
                     composable<Screen.Debug> {
                         DebugPage()
+                    }
+
+                    composable<Screen.Knowledge> {
+                        KnowledgePage()
+                    }
+
+                    composable<Screen.KnowledgeDetail> { backStackEntry ->
+                        val route = backStackEntry.toRoute<Screen.KnowledgeDetail>()
+                        KnowledgeDetailPage(baseId = route.id)
                     }
                 }
             }
@@ -368,6 +384,9 @@ sealed interface Screen {
     data object SettingMcp : Screen
 
     @Serializable
+    data object SettingLogcat : Screen
+
+    @Serializable
     data object SettingDonate : Screen
 
     @Serializable
@@ -375,4 +394,10 @@ sealed interface Screen {
 
     @Serializable
     data object Debug : Screen
+
+    @Serializable
+    data object Knowledge : Screen
+
+    @Serializable
+    data class KnowledgeDetail(val id: String) : Screen
 }

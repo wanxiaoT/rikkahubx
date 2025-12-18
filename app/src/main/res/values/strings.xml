@@ -84,6 +84,17 @@
   <string name="setting_page_search_result_size">Result Size</string>
   <string name="setting_page_mcp">MCP</string>
   <string name="setting_page_mcp_desc">Configure MCP Servers</string>
+  <string name="setting_page_logcat">Logcat Viewer</string>
+  <string name="setting_page_logcat_desc">View system logs</string>
+  <string name="setting_logcat_filter">Filter</string>
+  <string name="setting_logcat_all">All</string>
+  <string name="setting_logcat_refresh">Refresh</string>
+  <string name="setting_logcat_copy">Copy</string>
+  <string name="setting_logcat_clear">Clear</string>
+  <string name="setting_logcat_scroll_bottom">Scroll to bottom</string>
+  <string name="setting_logcat_empty">No logs</string>
+  <string name="setting_logcat_cleared">Logs cleared</string>
+  <string name="setting_logcat_copied">Logs copied to clipboard</string>
   <string name="setting_page_assistant">Assistant</string>
   <string name="setting_page_assistant_desc">Set up personalized assistants (agents)</string>
   <string name="setting_page_documentation">Documentation</string>
@@ -606,6 +617,10 @@
   <string name="assistant_page_remove_background">Remove Background</string>
   <string name="assistant_page_image_url">Image URL</string>
   <string name="assistant_page_confirm">Confirm</string>
+  <string name="assistant_page_knowledge_bases">Knowledge Bases</string>
+  <string name="assistant_page_knowledge_bases_desc">Select knowledge bases for RAG context retrieval</string>
+  <string name="assistant_page_knowledge_bases_empty">No knowledge bases available. Create one in Settings > Knowledge Base.</string>
+  <string name="assistant_page_knowledge_bases_selected">%d selected</string>
 
   <!-- Long Press Actions -->
   <string name="select_and_copy">Select and Copy</string>
@@ -836,4 +851,45 @@
   <string name="error_dialog_copy">Copy</string>
   <string name="error_dialog_close">Close</string>
   <string name="error_dialog_delete_conversation">Delete Conversation</string>
+
+  <!-- Knowledge Base -->
+  <string name="knowledge_base">Knowledge Base</string>
+  <string name="knowledge_base_desc">Manage knowledge bases for RAG</string>
+  <string name="knowledge_base_empty">No knowledge bases</string>
+  <string name="knowledge_base_empty_hint">Click + to create a new knowledge base</string>
+  <string name="create_knowledge_base">Create Knowledge Base</string>
+  <string name="delete_knowledge_base">Delete Knowledge Base</string>
+  <string name="delete_knowledge_base_confirm">Are you sure you want to delete \"%1$s\"? This action cannot be undone.</string>
+  <string name="knowledge_base_created">Knowledge base created</string>
+  <string name="knowledge_base_deleted">Knowledge base deleted</string>
+  <string name="knowledge_base_name_hint">Enter knowledge base name</string>
+  <string name="knowledge_base_description_hint">Enter description (optional)</string>
+  <string name="embedding_provider">Embedding Provider</string>
+  <string name="embedding_model">Embedding Model</string>
+  <string name="knowledge_item_count">%1$d items</string>
+  <string name="process_all">Process (%1$d)</string>
+  <string name="all">All</string>
+  <string name="files">Files</string>
+  <string name="notes">Notes</string>
+  <string name="urls">URLs</string>
+  <string name="no_items">No items</string>
+  <string name="add_file">Add File</string>
+  <string name="add_note">Add Note</string>
+  <string name="add_url">Add URL</string>
+  <string name="file_added">File added</string>
+  <string name="note_added">Note added</string>
+  <string name="url_added">URL added</string>
+  <string name="status_pending">Pending</string>
+  <string name="status_processing">Processing</string>
+  <string name="status_completed">Completed</string>
+  <string name="status_failed">Failed</string>
+  <string name="search_knowledge_base">Search Knowledge Base</string>
+  <string name="search_query_hint">Enter search query</string>
+  <string name="search_results">%1$d results found</string>
+  <string name="name">Name</string>
+  <string name="content">Content</string>
+  <string name="description">Description</string>
+  <string name="optional">optional</string>
+  <string name="create">Create</string>
+  <string name="close">Close</string>
 </resources>

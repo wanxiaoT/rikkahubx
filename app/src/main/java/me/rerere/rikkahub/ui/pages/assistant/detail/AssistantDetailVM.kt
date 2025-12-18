@@ -15,7 +15,9 @@ import me.rerere.rikkahub.data.datastore.SettingsStore
 import me.rerere.rikkahub.data.model.Assistant
 import me.rerere.rikkahub.data.model.AssistantMemory
 import me.rerere.rikkahub.data.model.Avatar
+import me.rerere.rikkahub.data.model.KnowledgeBase
 import me.rerere.rikkahub.data.model.Tag
+import me.rerere.rikkahub.data.repository.KnowledgeRepository
 import me.rerere.rikkahub.data.repository.MemoryRepository
 import me.rerere.rikkahub.utils.deleteChatFiles
 import kotlin.uuid.Uuid
@@ -26,6 +28,7 @@ class AssistantDetailVM(
     private val id: String,
     private val settingsStore: SettingsStore,
     private val memoryRepository: MemoryRepository,
+    private val knowledgeRepository: KnowledgeRepository,
     private val context: Application,
 ) : ViewModel() {
     private val assistantId = Uuid.parse(id)
@@ -66,6 +69,12 @@ class AssistantDetailVM(
         .map { settings ->
             settings.assistantTags
         }.stateIn(
+            scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList()
+        )
+
+    val knowledgeBases: StateFlow<List<KnowledgeBase>> = knowledgeRepository
+        .getAllBases()
+        .stateIn(
             scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = emptyList()
         )
 

@@ -3,12 +3,15 @@ package me.rerere.ai.provider.providers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
+import me.rerere.ai.provider.EmbeddingProvider
 import me.rerere.ai.provider.ImageGenerationParams
 import me.rerere.ai.provider.Model
 import me.rerere.ai.provider.Provider
@@ -38,7 +41,7 @@ import java.math.BigDecimal
 
 class OpenAIProvider(
     private val client: OkHttpClient
-) : Provider<ProviderSetting.OpenAI> {
+) : Provider<ProviderSetting.OpenAI>, EmbeddingProvider<ProviderSetting.OpenAI> {
     private val keyRoulette = KeyRoulette.default()
 
     private val chatCompletionsAPI = ChatCompletionsAPI(client = client, keyRoulette = keyRoulette)
@@ -209,5 +212,53 @@ class OpenAIProvider(
         }
 
         ImageGenerationResult(items = items)
+    }
+
+    override suspend fun embed(
+        providerSetting: ProviderSetting.OpenAI,
+        texts: List<String>,
+        model: String
+    ): List<FloatArray> = withContext(Dispatchers.IO) {
+        val key = keyRoulette.getEffectiveApiKey(
+            apiKey = providerSetting.apiKey,
+            apiKeys = providerSetting.apiKeys,
+            keyManagement = providerSetting.keyManagement,
+            multiKeyEnabled = providerSetting.multiKeyEnabled
+        )
+
+        val requestBody = json.encodeToString(
+            buildJsonObject {
+                put("model", model)
+                put("input", buildJsonArray {
+                    texts.forEach { add(JsonPrimitive(it)) }
+                })
+            }
+        )
+
+        val request = Request.Builder()
+            .url("${providerSetting.baseUrl}/embeddings")
+            .addHeader("Authorization", "Bearer $key")
+            .addHeader("Content-Type", "application/json")
+            .post(requestBody.toRequestBody("application/json".toMediaType()))
+            .build()
+
+        val response = client.configureClientWithProxy(providerSetting.proxy).newCall(request).await()
+        if (!response.isSuccessful) {
+            error("Failed to generate embeddings: ${response.code} ${response.body?.string()}")
+        }
+
+        val bodyStr = response.body?.string() ?: ""
+        val bodyJson = json.parseToJsonElement(bodyStr).jsonObject
+        val data = bodyJson["data"]?.jsonArray ?: error("No data in embedding response")
+
+        data.map { embeddingJson ->
+            val embeddingObj = embeddingJson.jsonObject
+            val embeddingArray = embeddingObj["embedding"]?.jsonArray
+                ?: error("No embedding array in response")
+
+            FloatArray(embeddingArray.size) { i ->
+                embeddingArray[i].jsonPrimitive.content.toFloat()
+            }
+        }
     }
 }

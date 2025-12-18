@@ -34,6 +34,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
+import me.rerere.ai.core.InputSchema
 import me.rerere.ai.core.MessageRole
 import me.rerere.ai.core.Tool
 import me.rerere.ai.provider.ModelAbility
@@ -108,6 +109,7 @@ class ChatService(
     private val providerManager: ProviderManager,
     private val localTools: LocalTools,
     val mcpManager: McpManager,
+    private val knowledgeService: KnowledgeService,
 ) {
     // 存储每个对话的状态
     private val conversations = ConcurrentHashMap<Uuid, MutableStateFlow<Conversation>>()
@@ -401,6 +403,8 @@ class ChatService(
                             )
                         )
                     }
+                    // 添加知识库搜索工具
+                    createKnowledgeTool(settings.getCurrentAssistant())?.let { add(it) }
                 },
                 truncateIndex = conversation.truncateIndex,
             ).onCompletion {
@@ -580,6 +584,70 @@ class ChatService(
         }
     }
 
+    // 创建知识库搜索工具
+    private suspend fun createKnowledgeTool(assistant: me.rerere.rikkahub.data.model.Assistant): Tool? {
+        if (assistant.knowledgeBases.isEmpty()) return null
+
+        return Tool(
+            name = "search_knowledge",
+            description = "Search in the knowledge base for relevant information. Use this tool when you need to find specific information from documents, notes, or other knowledge sources that have been added to the knowledge base.",
+            parameters = {
+                InputSchema.Obj(
+                    properties = JsonObject(
+                        mapOf(
+                            "query" to JsonObject(
+                                mapOf(
+                                    "type" to JsonPrimitive("string"),
+                                    "description" to JsonPrimitive("The search query to find relevant knowledge")
+                                )
+                            )
+                        )
+                    ),
+                    required = listOf("query")
+                )
+            },
+            execute = { params ->
+                val query = params.jsonObject["query"]?.let {
+                    if (it is JsonPrimitive) it.content else null
+                } ?: ""
+
+                val results = knowledgeService.searchAcrossKnowledgeBases(
+                    knowledgeBaseIds = assistant.knowledgeBases,
+                    query = query,
+                    limit = 5
+                )
+
+                JsonObject(
+                    mapOf(
+                        "results" to JsonArray(
+                            results.map { result ->
+                                JsonObject(
+                                    mapOf(
+                                        "content" to JsonPrimitive(result.chunk.content),
+                                        "source" to JsonPrimitive(result.itemName),
+                                        "similarity" to JsonPrimitive(result.similarity.toDouble())
+                                    )
+                                )
+                            }
+                        ),
+                        "count" to JsonPrimitive(results.size)
+                    )
+                )
+            },
+            systemPrompt = { _, _ ->
+                """
+                ## tool: search_knowledge
+
+                ### usage
+                - You can use the search_knowledge tool to search the knowledge base for relevant information.
+                - Use this tool when the user asks questions that might be answered by documents or notes in the knowledge base.
+                - The results will include relevant content snippets and their sources.
+                - You can perform multiple searches if needed to find more relevant information.
+                """.trimIndent()
+            }
+        )
+    }
+
     // 检查无效消息
     private fun checkInvalidMessages(conversationId: Uuid) {
         val conversation = getConversationFlow(conversationId).value
@@ -588,11 +656,12 @@ class ChatService(
         // 移除无效tool call
         messagesNodes = messagesNodes.mapIndexed { index, node ->
             val next = if (index < messagesNodes.size - 1) messagesNodes[index + 1] else null
-            if (node.currentMessage.hasPart<UIMessagePart.ToolCall>()) {
-                if (next?.currentMessage?.hasPart<UIMessagePart.ToolResult>() != true) {
+            if (node.safeCurrentMessage.hasPart<UIMessagePart.ToolCall>()) {
+                if (next?.safeCurrentMessage?.hasPart<UIMessagePart.ToolResult>() != true) {
+                    val currentMsg = node.safeCurrentMessage
                     return@mapIndexed node.copy(
-                        messages = node.messages.filter { it.id != node.currentMessage.id },
-                        selectIndex = node.selectIndex - 1
+                        messages = node.messages.filter { it.id != currentMsg.id },
+                        selectIndex = (node.selectIndex - 1).coerceAtLeast(0)
                     )
                 }
             }

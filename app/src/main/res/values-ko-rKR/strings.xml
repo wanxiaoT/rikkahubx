@@ -35,6 +35,10 @@
   <string name="assistant_page_chat_model_desc">어시스턴트의 기본 채팅 모델 설정. 미설정 시 전역 기본 채팅 모델 사용</string>
   <string name="assistant_page_clone">복제</string>
   <string name="assistant_page_confirm">확인</string>
+  <string name="assistant_page_knowledge_bases">지식 베이스</string>
+  <string name="assistant_page_knowledge_bases_desc">RAG 컨텍스트 검색을 위한 지식 베이스 선택</string>
+  <string name="assistant_page_knowledge_bases_empty">지식 베이스가 없습니다. 설정 > 지식 베이스에서 생성하세요.</string>
+  <string name="assistant_page_knowledge_bases_selected">%d개 선택됨</string>
   <string name="assistant_page_context_message_count">컨텍스트 메시지 수: %d</string>
   <string name="assistant_page_context_message_desc">과거 메시지 중 몇 개를 모델에 컨텍스트로 보낼지 제어. 이 수를 초과한 메시지는 무시되고 가장 최근 N개 메시지만 유지되어 토큰을 절약할 수 있습니다</string>
   <string name="assistant_page_context_message_size">컨텍스트 메시지 수</string>
@@ -670,4 +674,45 @@
   <string name="video">동영상</string>
   <string name="web_search_disabled">웹 검색 비활성화됨</string>
   <string name="web_search_enabled">웹 검색 활성화됨</string>
+
+  <!-- Knowledge Base -->
+  <string name="knowledge_base">지식 베이스</string>
+  <string name="knowledge_base_desc">RAG 지식 베이스 관리</string>
+  <string name="knowledge_base_empty">지식 베이스가 없습니다</string>
+  <string name="knowledge_base_empty_hint">+를 클릭하여 새 지식 베이스 생성</string>
+  <string name="create_knowledge_base">지식 베이스 생성</string>
+  <string name="delete_knowledge_base">지식 베이스 삭제</string>
+  <string name="delete_knowledge_base_confirm">\"%1$s\"을(를) 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.</string>
+  <string name="knowledge_base_created">지식 베이스가 생성되었습니다</string>
+  <string name="knowledge_base_deleted">지식 베이스가 삭제되었습니다</string>
+  <string name="knowledge_base_name_hint">지식 베이스 이름 입력</string>
+  <string name="knowledge_base_description_hint">설명 입력 (선택사항)</string>
+  <string name="embedding_provider">임베딩 제공자</string>
+  <string name="embedding_model">임베딩 모델</string>
+  <string name="knowledge_item_count">%1$d 개 항목</string>
+  <string name="process_all">처리 (%1$d)</string>
+  <string name="all">전체</string>
+  <string name="files">파일</string>
+  <string name="notes">메모</string>
+  <string name="urls">URL</string>
+  <string name="no_items">항목이 없습니다</string>
+  <string name="add_file">파일 추가</string>
+  <string name="add_note">메모 추가</string>
+  <string name="add_url">URL 추가</string>
+  <string name="file_added">파일이 추가되었습니다</string>
+  <string name="note_added">메모가 추가되었습니다</string>
+  <string name="url_added">URL이 추가되었습니다</string>
+  <string name="status_pending">대기 중</string>
+  <string name="status_processing">처리 중</string>
+  <string name="status_completed">완료</string>
+  <string name="status_failed">실패</string>
+  <string name="search_knowledge_base">지식 베이스 검색</string>
+  <string name="search_query_hint">검색어 입력</string>
+  <string name="search_results">%1$d 개 결과 발견</string>
+  <string name="name">이름</string>
+  <string name="content">내용</string>
+  <string name="description">설명</string>
+  <string name="optional">선택사항</string>
+  <string name="create">생성</string>
+  <string name="close">닫기</string>
 </resources>
