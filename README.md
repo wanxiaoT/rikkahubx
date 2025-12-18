@@ -29,7 +29,8 @@ kelivo-master\lib\core\models\api_keys.dart | 数据模型 - 定义核心数据�
 kelivo-master\lib\core\services\api_key_manager.dart | 核心服务 - Key 选择逻辑和状态更新
 kelivo-master\lib\features\provider\pages\multi_key_manager_page.dart | UI 页面 - 多 Key 管理界面
 
-从rikkahub-1.6.16提取token/tps记录功能插入新版源码
+v1.6.18
+从rikkahub官方v1.6.16提取token/tps记录功能插入新版源码
 修复大图片无法正常使用的问题🤓
 
 
