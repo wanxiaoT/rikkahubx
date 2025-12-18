@@ -11,7 +11,7 @@
 
 
 
-本项目Fork自RikkaHub
+本项目Fork自RikkaHub 1.16.5（maybe）
 
 RikkaHubX的作者是大陆人，交流最好用简体中文
 
@@ -28,6 +28,9 @@ RikkaHubX是RikkaHub的独立分支，在RikkaHub的基础上添加了部分修�
 kelivo-master\lib\core\models\api_keys.dart | 数据模型 - 定义核心数据结构
 kelivo-master\lib\core\services\api_key_manager.dart | 核心服务 - Key 选择逻辑和状态更新
 kelivo-master\lib\features\provider\pages\multi_key_manager_page.dart | UI 页面 - 多 Key 管理界面
+
+从rikkahub-1.6.16提取token/tps记录功能插入新版源码
+修复大图片无法正常使用的问题🤓
 
 
 

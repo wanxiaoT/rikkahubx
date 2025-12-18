@@ -829,4 +829,11 @@
   <string name="setting_provider_page_multi_key_desc">Manage multiple API keys with load balancing</string>
   <string name="setting_provider_page_multi_key_disabled_hint">Enable switch to manage multiple keys</string>
   <string name="setting_provider_page_api_key_disabled_by_multi_key">API Key is disabled when Multi-Key is enabled</string>
+
+  <!-- Error Dialog -->
+  <string name="error_dialog_title">Error Occurred</string>
+  <string name="error_dialog_description">An error occurred. You can copy the error details below for troubleshooting.</string>
+  <string name="error_dialog_copy">Copy</string>
+  <string name="error_dialog_close">Close</string>
+  <string name="error_dialog_delete_conversation">Delete Conversation</string>
 </resources>

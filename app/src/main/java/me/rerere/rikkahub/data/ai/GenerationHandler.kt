@@ -6,7 +6,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
+import kotlin.time.Clock
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -147,6 +150,10 @@ class GenerationHandler(
                 context = context,
                 model = model,
                 assistant = assistant
+            )
+            messages = messages.slice(0 until messages.lastIndex) + messages.last().copy(
+                finishedAt = Clock.System.now()
+                    .toLocalDateTime(TimeZone.currentSystemDefault())
             )
             emit(GenerationChunk.Messages(messages))
 

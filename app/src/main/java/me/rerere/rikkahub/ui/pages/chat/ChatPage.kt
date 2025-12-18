@@ -73,6 +73,8 @@ import me.rerere.rikkahub.utils.base64Decode
 import me.rerere.rikkahub.utils.createChatFilesByContents
 import me.rerere.rikkahub.utils.getFileMimeType
 import me.rerere.rikkahub.utils.navigateToChatPage
+import me.rerere.rikkahub.ui.components.ui.ErrorDialog
+import me.rerere.rikkahub.ui.components.ui.isCursorWindowError
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.uuid.Uuid
@@ -89,11 +91,41 @@ fun ChatPage(id: Uuid, text: String?, files: List<Uri>) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
+    // Error dialog state
+    var showErrorDialog by remember { mutableStateOf(false) }
+    var currentError by remember { mutableStateOf<Throwable?>(null) }
+
     // Handle Error
     LaunchedEffect(Unit) {
         vm.errorFlow.collect { error ->
-            toaster.show(error.message ?: "Error", type = ToastType.Error)
+            // 对于CursorWindow错误，显示详细的错误对话框
+            if (error.isCursorWindowError()) {
+                currentError = error
+                showErrorDialog = true
+            } else {
+                // 其他错误仍然使用Toast
+                toaster.show(error.message ?: "Error", type = ToastType.Error)
+            }
         }
+    }
+
+    // Error Dialog
+    if (showErrorDialog && currentError != null) {
+        ErrorDialog(
+            error = currentError!!,
+            onDismiss = {
+                showErrorDialog = false
+                currentError = null
+            },
+            onDeleteConversation = {
+                // 删除当前对话并导航到新对话
+                val currentConversation = vm.conversation.value
+                scope.launch {
+                    vm.deleteConversation(currentConversation)
+                    navigateToChatPage(navController)
+                }
+            }
+        )
     }
 
     val setting by vm.settings.collectAsStateWithLifecycle()

@@ -743,4 +743,11 @@
   <string name="setting_provider_page_multi_key_desc">管理多个API Key并进行负载均衡</string>
   <string name="setting_provider_page_multi_key_disabled_hint">开启开关以管理多个Key</string>
   <string name="setting_provider_page_api_key_disabled_by_multi_key">多Key管理已启用，单个API Key已禁用</string>
+
+  <!-- Error Dialog -->
+  <string name="error_dialog_title">发生错误</string>
+  <string name="error_dialog_description">发生了一个错误。您可以复制下方的错误详情以便排查问题。</string>
+  <string name="error_dialog_copy">复制</string>
+  <string name="error_dialog_close">关闭</string>
+  <string name="error_dialog_delete_conversation">删除对话</string>
 </resources>
