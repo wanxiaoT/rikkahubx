@@ -1,3 +1,5 @@
+[简体中文](https://github.com/wanxiaoT/rikkahubx/blob/main/README_EN.md) | [繁體中文](https://github.com/wanxiaoT/rikkahubx/blob/main/README_ZH_TW.md) | English
+
 <div align="center">
   <img src="docs/icon.png" alt="App Icon" width="100" />
   <h1>RikkaHubX</h1>
