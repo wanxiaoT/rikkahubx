@@ -60,12 +60,16 @@ kelivo-master\lib\features\provider\pages\multi_key_manager_page.dart | UI 页�
 //貌似并没有解决问题，尝试在下个版本中添加跳出生命周期的日志数据流以解决问题
 
 
-3.![Snipaste_2025-12-18_16-03-43](https://github.com/user-attachments/assets/3983be1d-cfe5-4731-af28-a79d0232951f)
-应群友 @镜镜月月 提议，添加知识库功能，具体的自己测试即可，要有一个支持嵌入的模型提供你知识库的索引，例如硅基流动提供的BAAI/bge-large-zh-v1.5
-写的仓储没来得及加上已经填写的知识库修改功能，下个版本会加
+3.应群友 @镜镜月月 提议，添加知识库功能，具体的自己测试即可，要有一个支持嵌入的模型提供你知识库的索引，例如硅基流动提供的BAAI/bge-large-zh-v1.5
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/3983be1d-cfe5-4731-af28-a79d0232951f" alt="知识库功能截图" width="300" />
+</p>
+
+写的仓促没来得及加上已经填写的知识库修改功能，以后版本会加
 实现特点：
 
-## 层级说明
+### 层级说明
 
 ### 1. 用户界面层
 - **KnowledgePage** - 知识库列表页面
@@ -158,5 +162,3 @@ Logcat日志输出为文件为可选选项，修改Logcat日志页面右上角�
 ## 📄 许可证
 
 [License](LICENSE)
-
-
