@@ -31,6 +31,7 @@ kelivo-master\lib\core\models\api_keys.dart | 数据模型 - 定义核心数据�
 kelivo-master\lib\core\services\api_key_manager.dart | 核心服务 - Key 选择逻辑和状态更新
 kelivo-master\lib\features\provider\pages\multi_key_manager_page.dart | UI 页面 - 多 Key 管理界面
 
+多Key轮询在这个版本里面不能正确使用到聊天中，这个版本的密钥健康度检测也是单线程的，请查看1.6.22版本
 
 
 ## v1.6.19
