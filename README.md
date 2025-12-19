@@ -115,7 +115,7 @@ kelivo-master\lib\features\provider\pages\multi_key_manager_page.dart | UI 页�
 
 ### 2. 修复多Key对话时不轮询的问题
 
-**问题缘由：** 在 `KeyRoulette.kt` 第126-132行，轮询策略使用了 `keyManagement?.roundRobinIndex` 来决定选择哪个Key，但是选择完Key后，没有更新 `roundRobinIndex`！这意味着每次请求都会选择同一个Key（索引0），轮询功能实际上不会工作。
+**问题缘由：** 在 `KeyRoulette.kt` 第126-132行，轮询策略使用了 `keyManagement?.roundRobinIndex` 来决定选择哪个Key，但是选择完Key后，没有更新 `roundRobinIndex`这意味着每次请求都会选择同一个Key（索引0），轮询功能实际上不会工作。
 
 **修复方式：**
 
@@ -144,6 +144,8 @@ kelivo-master\lib\features\provider\pages\multi_key_manager_page.dart | UI 页�
 ### 4. Logcat数据流保存功能
 
 为完全修复生图对话和普通对话切换数据模型时的索引越界问题做准备，在logcat查看页面中添加了数据流保存功能，logcat会实时保存到用户选择的位置，用户可以自行重命名，也可以使用默认配置 `/storage/emulated/0/1RikkaHubX/Logcat.txt`
+Logcat日志输出为文件为可选选项，修改Logcat日志页面右上角的六个功能按钮，修改的更小一点
+
 
 
 
