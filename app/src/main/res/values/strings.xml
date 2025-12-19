@@ -95,6 +95,18 @@
   <string name="setting_logcat_empty">No logs</string>
   <string name="setting_logcat_cleared">Logs cleared</string>
   <string name="setting_logcat_copied">Logs copied to clipboard</string>
+  <string name="setting_logcat_line_copied">Log line copied</string>
+  <string name="setting_logcat_start_save">Start streaming to file</string>
+  <string name="setting_logcat_stop_save">Stop streaming</string>
+  <string name="setting_logcat_stream_started">Log streaming started</string>
+  <string name="setting_logcat_stream_stopped">Log streaming stopped</string>
+  <string name="setting_logcat_stream_error">Stream error: %1$s</string>
+  <string name="setting_logcat_save_title">Save Logcat Stream</string>
+  <string name="setting_logcat_save_desc">Logs will be saved in real-time to the selected location</string>
+  <string name="setting_logcat_filename">Filename</string>
+  <string name="setting_logcat_default_path">Default path: %1$s</string>
+  <string name="setting_logcat_choose_location">Choose Location</string>
+  <string name="setting_logcat_use_default">Use Default</string>
   <string name="setting_page_assistant">Assistant</string>
   <string name="setting_page_assistant_desc">Set up personalized assistants (agents)</string>
   <string name="setting_page_documentation">Documentation</string>
@@ -828,7 +840,7 @@
   <string name="multi_key_page_batch_test_complete">Test complete: %1$d success, %2$d failed</string>
   <string name="multi_key_page_batch_test_select_model">Select Test Model</string>
   <string name="multi_key_page_batch_test_use_stream">Use Stream Mode</string>
-  <string name="multi_key_page_batch_test_use_stream_desc">Verify SSE streaming response</string>
+  <string name="multi_key_page_batch_test_use_stream_desc">Verify SSE streaming response (faster key validation when enabled)</string>
   <string name="multi_key_page_batch_test_start">Start Test</string>
   <string name="multi_key_page_batch_test_cancel">Cancel</string>
   <string name="multi_key_page_batch_test_testing">Testing…</string>

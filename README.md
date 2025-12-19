@@ -96,6 +96,57 @@ kelivo-master\lib\features\provider\pages\multi_key_manager_page.dart | UI 页�
 ✅ 余弦相似度搜索
 ⚠️ 暴力搜索（遍历所有向量），适合中小规模知识库
 
+
+
+## v1.6.21
+1.在模型列表页面的每个模型条目上添加了一个X删除按钮。
+
+具体改动：
+位置：每个模型条目右边，在调控按钮（齿轮图标）的左边
+功能：点击X按钮可以直接删除该模型，不需要再滑动删除了
+图标：和底部"可用模型"弹窗里的X图标一样
+现在用户可以通过两种方式删除模型：
+1.点击X按钮直接删除（新增）
+2.向左滑动条目后点击删除（原有功能）
+
+
+2.修复多Key对话时不轮询的问题
+  问题缘由：在 KeyRoulette.kt 第126-132行，轮询策略使用了 keyManagement?.roundRobinIndex 来决定选择哪个Key，但是选择完Key后，没有更新 roundRobinIndex！
+  这意味着每次请求都会选择同一个Key（索引0），轮询功能实际上不会工作。
+  
+  修复方式：
+  
+KeyRoulette.kt
+使用内存中的 roundRobinIndexMap 来维护每个Provider的轮询索引
+每次选择Key后，自动将索引+1
+使用第一个Key的ID作为Provider标识
+LoadBalanceStrategy.ROUND_ROBIN -> {
+    // 轮询选择 - 使用内存中的索引来实现真正的轮询
+    val sortedKeys = availableKeysWithRecovery.sortedBy { it.first.id }
+    // 使用第一个key的id作为provider标识来维护轮询索引
+    val providerKey = apiKeys.firstOrNull()?.id ?: "default"
+    val currentIndex = roundRobinIndexMap.getOrDefault(providerKey, 0)
+    val idx = currentIndex % sortedKeys.size
+    // 更新索引到下一个位置
+    roundRobinIndexMap[providerKey] = (currentIndex + 1) % sortedKeys.size
+    sortedKeys[idx]
+}
+
+ ApiKeyConfig.kt
+ 在 KeySelectionResult 中添加了 nextRoundRobinIndex 字段（备用，方便未来持久化）
+ 修复后的效果：
+ 第1次请求 → 选择Key 0
+ 第2次请求 → 选择Key 1
+ 第3次请求 → 选择Key 2
+ ...依此类推，循环轮询
+
+3.设置-提供商-任意提供商-多Key管理 部分默认开启使用流式模式，描述为验证SSE流式响应（开启后可以更快地验证Key是否可用）
+
+4.为完全修复生图对话和普通对话切换数据模型时的索引越界问题做准备，在logcat查看页面中添加了数据流保存功能，logcat会实时保存到用户选择的位置，用户可以自行重命名，也可以使用默认配置/storage/emulated/0/1RikkaHubX/Logcat.txt
+
+
+
+
 我感觉把更新日志写release里面不方便我就写readme.md了
 
 觉得本项目好请点一个⭐Star

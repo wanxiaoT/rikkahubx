@@ -495,6 +495,18 @@
   <string name="setting_logcat_empty">暂无日志</string>
   <string name="setting_logcat_cleared">日志已清除</string>
   <string name="setting_logcat_copied">日志已复制到剪贴板</string>
+  <string name="setting_logcat_line_copied">已复制该行日志</string>
+  <string name="setting_logcat_start_save">开始保存到文件</string>
+  <string name="setting_logcat_stop_save">停止保存</string>
+  <string name="setting_logcat_stream_started">日志流保存已开始</string>
+  <string name="setting_logcat_stream_stopped">日志流保存已停止</string>
+  <string name="setting_logcat_stream_error">保存错误: %1$s</string>
+  <string name="setting_logcat_save_title">保存日志流</string>
+  <string name="setting_logcat_save_desc">日志将实时保存到选定位置</string>
+  <string name="setting_logcat_filename">文件名</string>
+  <string name="setting_logcat_default_path">默认路径: %1$s</string>
+  <string name="setting_logcat_choose_location">选择位置</string>
+  <string name="setting_logcat_use_default">使用默认</string>
   <string name="setting_page_model_and_services">模型与服务</string>
   <string name="setting_page_no_share_app">找不到分享应用</string>
   <string name="setting_page_providers">提供商</string>
@@ -742,7 +754,7 @@
   <string name="multi_key_page_batch_test_complete">测试完成：%1$d 成功，%2$d 失败</string>
   <string name="multi_key_page_batch_test_select_model">选择测试模型</string>
   <string name="multi_key_page_batch_test_use_stream">使用流式模式</string>
-  <string name="multi_key_page_batch_test_use_stream_desc">验证SSE流式响应</string>
+  <string name="multi_key_page_batch_test_use_stream_desc">验证SSE流式响应（开启后可以更快地验证Key是否可用）</string>
   <string name="multi_key_page_batch_test_start">开始测试</string>
   <string name="multi_key_page_batch_test_cancel">取消</string>
   <string name="multi_key_page_batch_test_testing">测试中…</string>

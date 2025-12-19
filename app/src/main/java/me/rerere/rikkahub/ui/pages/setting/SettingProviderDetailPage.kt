@@ -1545,6 +1545,15 @@ private fun ModelCard(
                     }
                 }
 
+                // Delete button
+                IconButton(
+                    onClick = {
+                        onDelete()
+                    }
+                ) {
+                    Icon(Lucide.X, contentDescription = null)
+                }
+
                 // Edit button
                 IconButton(
                     onClick = {

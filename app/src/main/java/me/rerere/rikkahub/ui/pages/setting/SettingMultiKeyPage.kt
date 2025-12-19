@@ -813,7 +813,7 @@ private fun BatchTestBottomSheet(
     var selectedModel by remember {
         mutableStateOf(provider.models.firstOrNull { it.type == ModelType.CHAT })
     }
-    var useStream by remember { mutableStateOf(false) }
+    var useStream by remember { mutableStateOf(true) }
     
     ModalBottomSheet(
         onDismissRequest = onDismiss,

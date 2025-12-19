@@ -124,10 +124,14 @@ private class DefaultKeyRoulette : KeyRoulette {
             }
             
             LoadBalanceStrategy.ROUND_ROBIN -> {
-                // 轮询选择
+                // 轮询选择 - 使用内存中的索引来实现真正的轮询
                 val sortedKeys = availableKeysWithRecovery.sortedBy { it.first.id }
-                val currentIndex = keyManagement?.roundRobinIndex ?: 0
+                // 使用第一个key的id作为provider标识来维护轮询索引
+                val providerKey = apiKeys.firstOrNull()?.id ?: "default"
+                val currentIndex = roundRobinIndexMap.getOrDefault(providerKey, 0)
                 val idx = currentIndex % sortedKeys.size
+                // 更新索引到下一个位置
+                roundRobinIndexMap[providerKey] = (currentIndex + 1) % sortedKeys.size
                 sortedKeys[idx]
             }
         }
@@ -143,7 +147,15 @@ private class DefaultKeyRoulette : KeyRoulette {
             chosenPair.first
         }
         
-        return KeySelectionResult(chosenKey, "strategy_${strategy.name.lowercase()}")
+        // 计算下一个轮询索引
+        val nextIndex = if (strategy == LoadBalanceStrategy.ROUND_ROBIN) {
+            val currentIndex = keyManagement?.roundRobinIndex ?: 0
+            (currentIndex + 1) % availableKeysWithRecovery.size
+        } else {
+            keyManagement?.roundRobinIndex ?: 0
+        }
+        
+        return KeySelectionResult(chosenKey, "strategy_${strategy.name.lowercase()}", nextIndex)
     }
     
     override fun updateKeyStatus(

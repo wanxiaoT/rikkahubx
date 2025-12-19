@@ -167,5 +167,6 @@ data class KeyManagementConfig(
  */
 data class KeySelectionResult(
     val key: ApiKeyConfig?,
-    val reason: String
+    val reason: String,
+    val nextRoundRobinIndex: Int = 0  // 下一次轮询的索引
 )
