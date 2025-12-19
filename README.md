@@ -11,7 +11,7 @@
 
 
 
-本项目Fork自RikkaHub 1.16.5（maybe）
+本项目Fork自RikkaHub 1.16.5
 
 RikkaHubX的作者是大陆人，交流最好用简体中文
 
