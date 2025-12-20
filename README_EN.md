@@ -1,4 +1,4 @@
-[简体中文](https://github.com/wanxiaoT/rikkahubx/blob/main/README_EN.md) | [繁體中文](https://github.com/wanxiaoT/rikkahubx/blob/main/README_ZH_TW.md) | English
+[简体中文](https://github.com/wanxiaoT/rikkahubx/blob/main/README.md) | [繁體中文](https://github.com/wanxiaoT/rikkahubx/blob/main/README_ZH_TW.md) | English
 
 <div align="center">
   <img src="docs/icon.png" alt="App Icon" width="100" />
@@ -13,7 +13,7 @@ A native Android LLM chat client that supports switching between different provi
 
 
 
-This project is forked from RikkaHub 1.16.5. PRs for this project are welcome (just explain clearly and no viruses, because I'm lazy)
+This project is forked from RikkaHub 1.6.15. PRs for this project are welcome (just explain clearly and no viruses, because I'm lazy)
 
 The author of RikkaHubX is from mainland China, so communication is best in Simplified Chinese
 
@@ -153,7 +153,24 @@ In preparation for completely fixing the index out-of-bounds issue when switchin
 Logcat log output to file is an optional feature. Modified the six function buttons in the upper right corner of the Logcat log page to be smaller
 
 
+# 1.6.22
+### New Features
+- **Multi-language Support**:
+  - You can now switch languages in `Settings - Models & Services - Language`
+  - Added support for Traditional Chinese for Hong Kong/Macau regions
+  
+  *Developer Notes*:
+  Uses `AppCompatDelegate.setApplicationLocales()` to implement in-app language switching
+  Requires `localeConfig` configuration for Android 13+ systems
 
+## Bug Fixes
+- **Fixed QR Code Sharing Issue**:
+- Problem:
+  In `Settings > Provider` for any provider settings:
+  Clicking the share button in the upper right corner → "Share your LLM model" → Selecting QQ would send `ai-provider:v1:base64` format encoded text instead of the displayed QR code
+    
+- Fix Result:
+  Now correctly shares QR code images to QQ or other apps
 
 
 
