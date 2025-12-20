@@ -715,4 +715,7 @@
   <string name="optional">необязательно</string>
   <string name="create">Создать</string>
   <string name="close">Закрыть</string>
+  <string name="setting_page_language">Язык</string>
+  <string name="setting_page_language_desc">Установить язык отображения приложения</string>
+  <string name="setting_page_language_system">Системный</string>
 </resources>

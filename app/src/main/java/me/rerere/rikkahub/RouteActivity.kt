@@ -3,9 +3,9 @@ package me.rerere.rikkahub
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -86,7 +86,7 @@ import kotlin.uuid.Uuid
 
 private const val TAG = "RouteActivity"
 
-class RouteActivity : ComponentActivity() {
+class RouteActivity : AppCompatActivity() {
     private val highlighter by inject<Highlighter>()
     private val okHttpClient by inject<OkHttpClient>()
     private val settingsStore by inject<SettingsStore>()

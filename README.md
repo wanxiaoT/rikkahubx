@@ -153,9 +153,26 @@ kelivo-master\lib\features\provider\pages\multi_key_manager_page.dart | UI 页�
 Logcat日志输出为文件为可选选项，修改Logcat日志页面右上角的六个功能按钮，修改的更小一点
 
 
+# 1.6.22
+### 新功能
+- **多语言支持**：
+  - 现在可以在`设置 - 模型与服务 - 语言`中切换语言
+  - 新增支持香港/澳门地区的繁体中文
+  
+  *开发者说明*：  
+  使用`AppCompatDelegate.setApplicationLocales()`实现应用内语言切换  
+  针对Android 13+系统需配置`localeConfig`
 
+## Bug修复
+- **修复二维码分享问题**：
+- 问题现象：  
+  在`设置 > 提供商`的任意提供商设置中：  
+  点击右上角分享按钮 → "共享你的LLM模型" → 选择QQ时，会发出`ai-provider:v1:base64`格式的编码文本，而不是显示的二维码
+    
+- 修复结果：  
+  现在会正确分享二维码图片到QQ或其他应用
 
-
+  
 
 我感觉把更新日志写release里面不方便我就写readme.md了
 

@@ -715,4 +715,7 @@
   <string name="optional">선택사항</string>
   <string name="create">생성</string>
   <string name="close">닫기</string>
+  <string name="setting_page_language">언어</string>
+  <string name="setting_page_language_desc">앱 표시 언어 설정</string>
+  <string name="setting_page_language_system">시스템 기본값</string>
 </resources>

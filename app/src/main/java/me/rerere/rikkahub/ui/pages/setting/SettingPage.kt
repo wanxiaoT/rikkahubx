@@ -37,12 +37,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import com.composables.icons.lucide.BadgeInfo
 import com.composables.icons.lucide.BookOpen
 import com.composables.icons.lucide.Boxes
 import com.composables.icons.lucide.Database
 import com.composables.icons.lucide.Drama
 import com.composables.icons.lucide.Earth
+import com.composables.icons.lucide.Globe
 import com.composables.icons.lucide.Hammer
 import com.composables.icons.lucide.HardDrive
 import com.composables.icons.lucide.Heart
@@ -254,6 +257,10 @@ fun SettingPage(vm: SettingVM = koinViewModel()) {
                 )
             }
 
+            item("language") {
+                LanguageSettingItem()
+            }
+
             stickyHeader {
                 Text(
                     text = stringResource(R.string.setting_page_data_settings),
@@ -443,4 +450,62 @@ fun SettingItem(
             }
         )
     }
+}
+
+// Supported languages for the app
+private enum class AppLanguage(val tag: String, val displayName: String) {
+    SYSTEM("", ""),  // System default - display name will be from string resource
+    ENGLISH("en", "English"),
+    SIMPLIFIED_CHINESE("zh", "简体中文"),
+    TRADITIONAL_CHINESE_HK("zh-HK", "繁體中文 (中國香港)"),
+    TRADITIONAL_CHINESE_MO("zh-MO", "繁體中文 (中國澳門)"),
+    TRADITIONAL_CHINESE_TW("zh-TW", "繁體中文 (中國台灣)"),
+    JAPANESE("ja", "日本語"),
+    KOREAN("ko-KR", "한국어"),
+    RUSSIAN("ru", "Русский");
+
+    companion object {
+        fun fromTag(tag: String?): AppLanguage {
+            if (tag.isNullOrEmpty()) return SYSTEM
+            return entries.find { it.tag == tag } ?: SYSTEM
+        }
+    }
+}
+
+@Composable
+private fun LanguageSettingItem() {
+    val currentLocale = AppCompatDelegate.getApplicationLocales()
+    val currentTag = if (currentLocale.isEmpty) "" else currentLocale.toLanguageTags()
+    val currentLanguage = AppLanguage.fromTag(currentTag)
+    val systemDefaultText = stringResource(R.string.setting_page_language_system)
+
+    ListItem(
+        headlineContent = {
+            Text(stringResource(R.string.setting_page_language))
+        },
+        supportingContent = {
+            Text(stringResource(R.string.setting_page_language_desc))
+        },
+        leadingContent = {
+            Icon(Lucide.Globe, null)
+        },
+        trailingContent = {
+            Select(
+                options = AppLanguage.entries.toList(),
+                selectedOption = currentLanguage,
+                onOptionSelected = { language ->
+                    val localeList = if (language == AppLanguage.SYSTEM) {
+                        LocaleListCompat.getEmptyLocaleList()
+                    } else {
+                        LocaleListCompat.forLanguageTags(language.tag)
+                    }
+                    AppCompatDelegate.setApplicationLocales(localeList)
+                },
+                optionToString = { language ->
+                    if (language == AppLanguage.SYSTEM) systemDefaultText else language.displayName
+                },
+                modifier = Modifier.width(180.dp)
+            )
+        }
+    )
 }

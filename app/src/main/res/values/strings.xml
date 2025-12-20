@@ -86,6 +86,9 @@
   <string name="setting_page_mcp_desc">Configure MCP Servers</string>
   <string name="setting_page_logcat">Logcat Viewer</string>
   <string name="setting_page_logcat_desc">View system logs</string>
+  <string name="setting_page_language">Language</string>
+  <string name="setting_page_language_desc">Set app display language</string>
+  <string name="setting_page_language_system">System Default</string>
   <string name="setting_logcat_filter">Filter</string>
   <string name="setting_logcat_all">All</string>
   <string name="setting_logcat_refresh">Refresh</string>

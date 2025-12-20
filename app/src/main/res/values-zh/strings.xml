@@ -486,6 +486,9 @@
   <string name="setting_page_mcp_desc">配置MCP服务器</string>
   <string name="setting_page_logcat">Logcat查看</string>
   <string name="setting_page_logcat_desc">查看系统日志</string>
+  <string name="setting_page_language">语言</string>
+  <string name="setting_page_language_desc">设置应用显示语言</string>
+  <string name="setting_page_language_system">跟随系统</string>
   <string name="setting_logcat_filter">过滤</string>
   <string name="setting_logcat_all">全部</string>
   <string name="setting_logcat_refresh">刷新</string>

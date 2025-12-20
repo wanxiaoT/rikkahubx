@@ -1,6 +1,7 @@
 package me.rerere.rikkahub.ui.components.ui
 
 import android.content.Intent
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,16 +18,26 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.set
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Share2
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
 import me.rerere.ai.provider.ProviderSetting
 import me.rerere.rikkahub.utils.JsonInstant
+import java.io.File
+import java.io.FileOutputStream
 import kotlin.io.encoding.Base64
 
 @Composable
@@ -34,6 +45,25 @@ fun ShareSheet(
     state: ShareSheetState,
 ) {
     val context = LocalContext.current
+    val qrCodeValue = state.currentProvider?.encodeForShare() ?: ""
+
+    // Generate QR code bitmap for sharing
+    val qrCodeWriter = remember { QRCodeWriter() }
+    val qrCodeBitmap = remember(qrCodeValue) {
+        if (qrCodeValue.isEmpty()) return@remember null
+        val size = 512
+        val bitMatrix = qrCodeWriter.encode(qrCodeValue, BarcodeFormat.QR_CODE, size, size)
+        createBitmap(size, size).apply {
+            val blackColor = Color.Black.toArgb()
+            val whiteColor = Color.White.toArgb()
+            for (x in 0 until size) {
+                for (y in 0 until size) {
+                    this[x, y] = if (bitMatrix[x, y]) blackColor else whiteColor
+                }
+            }
+        }
+    }
+
     if (state.isShow) {
         ModalBottomSheet(
             onDismissRequest = {
@@ -56,14 +86,31 @@ fun ShareSheet(
 
                     IconButton(
                         onClick = {
-                            val intent = Intent(Intent.ACTION_SEND)
-                            intent.type = "text/plain"
-                            intent.putExtra(
-                                Intent.EXTRA_TEXT,
-                                state.currentProvider?.encodeForShare() ?: ""
-                            )
                             try {
-                                context.startActivity(Intent.createChooser(intent, null))
+                                qrCodeBitmap?.let { bitmap ->
+                                    // Save bitmap to cache directory
+                                    val cachePath = File(context.cacheDir, "shared_images")
+                                    cachePath.mkdirs()
+                                    val imageFile = File(cachePath, "provider_qrcode.png")
+                                    FileOutputStream(imageFile).use { fos ->
+                                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+                                    }
+
+                                    // Get content URI using FileProvider
+                                    val contentUri = FileProvider.getUriForFile(
+                                        context,
+                                        "${context.packageName}.fileprovider",
+                                        imageFile
+                                    )
+
+                                    // Share image
+                                    val intent = Intent(Intent.ACTION_SEND).apply {
+                                        type = "image/png"
+                                        putExtra(Intent.EXTRA_STREAM, contentUri)
+                                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                    }
+                                    context.startActivity(Intent.createChooser(intent, null))
+                                }
                             } catch (e: Exception) {
                                 e.printStackTrace()
                             }
@@ -74,7 +121,7 @@ fun ShareSheet(
                 }
 
                 QRCode(
-                    value = state.currentProvider?.encodeForShare() ?: "",
+                    value = qrCodeValue,
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
                         .fillMaxWidth()

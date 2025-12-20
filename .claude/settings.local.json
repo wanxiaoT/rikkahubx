@@ -5,7 +5,9 @@
       "Bash(find:*)",
       "Bash(dir:*)",
       "Bash(findstr:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(del \"C:\\Users\\Administrator\\AndroidStudioProjects\\rikkahub-1.6.15\\app\\src\\main\\res\\xml\\locales_config.xml\")"
     ],
     "deny": []
   }

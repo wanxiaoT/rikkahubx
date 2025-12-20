@@ -715,4 +715,7 @@
   <string name="optional">選填</string>
   <string name="create">建立</string>
   <string name="close">關閉</string>
+  <string name="setting_page_language">語言</string>
+  <string name="setting_page_language_desc">設定應用程式顯示語言</string>
+  <string name="setting_page_language_system">跟隨系統</string>
 </resources>

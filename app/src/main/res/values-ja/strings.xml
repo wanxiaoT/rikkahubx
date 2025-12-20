@@ -715,4 +715,7 @@
   <string name="optional">任意</string>
   <string name="create">作成</string>
   <string name="close">閉じる</string>
+  <string name="setting_page_language">言語</string>
+  <string name="setting_page_language_desc">アプリの表示言語を設定</string>
+  <string name="setting_page_language_system">システムに従う</string>
 </resources>
