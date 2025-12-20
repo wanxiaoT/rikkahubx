@@ -1,4 +1,4 @@
-[简体中文](https://github.com/wanxiaoT/rikkahubx/blob/main/README.md) | 繁體中文 | [English](https://github.com/wanxiaoT/rikkahubx/blob/main/README_EN.md)
+[简体中文](README.md) | 繁體中文 | [English](README_EN.md)
 
 <div align="center">
   <img src="docs/icon.png" alt="App 圖示" width="100" />
@@ -172,6 +172,29 @@ Logcat日誌輸出為檔案為可選選項，修改Logcat日誌頁面右上角�
 - 修復結果：
   現在會正確分享二維碼圖片到QQ或其他應用
 
+# 1.6.23
+
+### 1. 新增以下資料的備份功能：
+
+- 知識庫資料
+- Logcat 查看設定
+- 語言設定（支援香港/澳門繁體中文）
+- 預設助手的本地工具開關（檔案系統、網頁讀取）
+- 多 API Key 設定和儲存資料
+
+---
+
+**開發者說明**：
+| 功能             | 儲存位置                             | 備份方式      | 程式碼位置           |
+|------------------|--------------------------------------|---------------|--------------------|
+| 知識庫資料       | Room 資料庫                          | rikka_hub.db  | WebdavSync.kt      |
+| 知識庫引用       | Assistant.knowledgeBases             | settings.json | Assistant.kt       |
+| 本地工具開關     | Assistant.localTools                 | settings.json | Assistant.kt       |
+| 多 API Key 列表  | ProviderSetting.apiKeys              | settings.json | ProviderSetting.kt |
+| Key 管理配置     | ProviderSetting.keyManagement        | settings.json | ProviderSetting.kt |
+| Key 使用統計     | ApiKeyConfig.usage                   | settings.json | ApiKeyConfig.kt    |
+| 負載均衡策略     | KeyManagementConfig.strategy         | settings.json | ApiKeyConfig.kt    |
+| 輪詢索引         | KeyManagementConfig.roundRobinIndex  | settings.json | ApiKeyConfig.kt    |
 
 
 我感覺把更新日誌寫release裡面不方便我就寫readme.md了

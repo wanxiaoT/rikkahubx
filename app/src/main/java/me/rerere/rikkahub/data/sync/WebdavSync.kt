@@ -195,6 +195,22 @@ class WebdavSync(
                 content = json.encodeToString(settingsStore.settingsFlow.value)
             )
 
+            // 备份语言设置 SharedPreferences
+            try {
+                val localesPrefsFile = File(
+                    context.dataDir,
+                    "shared_prefs/androidx.appcompat.app.AppLocalesStorageHelper.xml"
+                )
+                if (localesPrefsFile.exists()) {
+                    addFileToZip(zipOut, localesPrefsFile, "app_locales.xml")
+                    Log.i(TAG, "prepareBackupFile: Backed up language settings")
+                } else {
+                    Log.i(TAG, "prepareBackupFile: No language settings to backup")
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "prepareBackupFile: Failed to backup language settings", e)
+            }
+
             // 备份数据库
             if (webDavConfig.items.contains(WebDavConfig.BackupItem.DATABASE)) {
                 // 备份主数据库文件
@@ -270,6 +286,40 @@ class WebdavSync(
                                         e
                                     )
                                     throw Exception("Failed to restore settings: ${e.message}")
+                                }
+                            }
+
+                            "app_locales.xml" -> {
+                                // 恢复语言设置
+                                try {
+                                    val localesPrefsFile = File(
+                                        context.dataDir,
+                                        "shared_prefs/androidx.appcompat.app.AppLocalesStorageHelper.xml"
+                                    )
+                                    Log.i(
+                                        TAG,
+                                        "restoreFromBackupFile: Restoring language settings to ${localesPrefsFile.absolutePath}"
+                                    )
+
+                                    // 确保父目录存在
+                                    localesPrefsFile.parentFile?.mkdirs()
+
+                                    // 写入文件
+                                    FileOutputStream(localesPrefsFile).use { outputStream ->
+                                        zipIn.copyTo(outputStream)
+                                    }
+
+                                    Log.i(
+                                        TAG,
+                                        "restoreFromBackupFile: Language settings restored successfully (${localesPrefsFile.length()} bytes)"
+                                    )
+                                } catch (e: Exception) {
+                                    Log.e(
+                                        TAG,
+                                        "restoreFromBackupFile: Failed to restore language settings",
+                                        e
+                                    )
+                                    // 不抛出异常，语言设置恢复失败不应该导致整个恢复流程失败
                                 }
                             }
 

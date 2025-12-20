@@ -1,4 +1,4 @@
-[简体中文](https://github.com/wanxiaoT/rikkahubx/blob/main/README.md) | [繁體中文](https://github.com/wanxiaoT/rikkahubx/blob/main/README_ZH_TW.md) | English
+[简体中文](README.md) | [繁體中文](README_ZH_TW.md) | English
 
 <div align="center">
   <img src="docs/icon.png" alt="App Icon" width="100" />
@@ -172,6 +172,29 @@ Logcat log output to file is an optional feature. Modified the six function butt
 - Fix Result:
   Now correctly shares QR code images to QQ or other apps
 
+# 1.6.23
+
+### 1. Added backup functionality for the following data:
+
+- Knowledge base data
+- Logcat viewing settings
+- Language settings (supports Traditional Chinese for Hong Kong/Macau)
+- Default assistant's local tool switches (file system, web page reading)
+- Multi API Key settings and storage data
+
+---
+
+**Developer Notes**:
+| Feature             | Storage Location                     | Backup Method | Code Location      |
+|---------------------|--------------------------------------|---------------|--------------------|
+| Knowledge base data | Room Database                        | rikka_hub.db  | WebdavSync.kt      |
+| Knowledge base refs | Assistant.knowledgeBases             | settings.json | Assistant.kt       |
+| Local tool switches | Assistant.localTools                 | settings.json | Assistant.kt       |
+| Multi API Key list  | ProviderSetting.apiKeys              | settings.json | ProviderSetting.kt |
+| Key management config | ProviderSetting.keyManagement      | settings.json | ProviderSetting.kt |
+| Key usage stats     | ApiKeyConfig.usage                   | settings.json | ApiKeyConfig.kt    |
+| Load balancing strategy | KeyManagementConfig.strategy     | settings.json | ApiKeyConfig.kt    |
+| Round-robin index   | KeyManagementConfig.roundRobinIndex  | settings.json | ApiKeyConfig.kt    |
 
 
 I feel like writing the changelog in release is inconvenient so I wrote it in readme.md

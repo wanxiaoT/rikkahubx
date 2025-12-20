@@ -1,4 +1,4 @@
-简体中文 | [繁體中文](https://github.com/wanxiaoT/rikkahubx/blob/main/README_ZH_TW.md) | [English](https://github.com/wanxiaoT/rikkahubx/blob/main/README_EN.md)
+简体中文 | [繁體中文](README_ZH_TW.md) | [English](README_EN.md)
 
 <div align="center">
   <img src="docs/icon.png" alt="App 图标" width="100" />
@@ -159,11 +159,11 @@ Logcat日志输出为文件为可选选项，修改Logcat日志页面右上角�
   - 现在可以在`设置 - 模型与服务 - 语言`中切换语言
   - 新增支持香港/澳门地区的繁体中文
   
-  *开发者说明*：  
+  **开发者说明**：  
   使用`AppCompatDelegate.setApplicationLocales()`实现应用内语言切换  
   针对Android 13+系统需配置`localeConfig`
 
-## Bug修复
+### Bug修复
 - **修复二维码分享问题**：
 - 问题现象：  
   在`设置 > 提供商`的任意提供商设置中：  
@@ -171,6 +171,30 @@ Logcat日志输出为文件为可选选项，修改Logcat日志页面右上角�
     
 - 修复结果：  
   现在会正确分享二维码图片到QQ或其他应用
+
+# 1.6.23
+
+### 1. 新增以下数据的备份功能：
+
+- 知识库数据
+- Logcat 查看设置
+- 语言设置（支持香港/澳门繁体中文）
+- 默认助手的本地工具开关（文件系统、网页读取）
+- 多 API Key 设置和存储数据
+
+---
+
+**开发者说明**：
+| 功能             | 存储位置                             | 备份方式      | 代码位置           |
+|------------------|--------------------------------------|---------------|--------------------|
+| 知识库数据       | Room 数据库                          | rikka_hub.db  | WebdavSync.kt      |
+| 知识库引用       | Assistant.knowledgeBases             | settings.json | Assistant.kt       |
+| 本地工具开关     | Assistant.localTools                 | settings.json | Assistant.kt       |
+| 多 API Key 列表  | ProviderSetting.apiKeys              | settings.json | ProviderSetting.kt |
+| Key 管理配置     | ProviderSetting.keyManagement        | settings.json | ProviderSetting.kt |
+| Key 使用统计     | ApiKeyConfig.usage                   | settings.json | ApiKeyConfig.kt    |
+| 负载均衡策略     | KeyManagementConfig.strategy         | settings.json | ApiKeyConfig.kt    |
+| 轮询索引         | KeyManagementConfig.roundRobinIndex  | settings.json | ApiKeyConfig.kt    |
 
 
 我感觉把更新日志写release里面不方便我就写readme.md了
