@@ -7,7 +7,12 @@
       "Bash(findstr:*)",
       "Bash(mkdir:*)",
       "Bash(cp:*)",
-      "Bash(del \"C:\\Users\\Administrator\\AndroidStudioProjects\\rikkahub-1.6.15\\app\\src\\main\\res\\xml\\locales_config.xml\")"
+      "Bash(del \"C:\\Users\\Administrator\\AndroidStudioProjects\\rikkahub-1.6.15\\app\\src\\main\\res\\xml\\locales_config.xml\")",
+      "Bash(git add:*)",
+      "Bash(git diff:*)",
+      "Bash(git commit:*)",
+      "Bash(gh:*)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }
