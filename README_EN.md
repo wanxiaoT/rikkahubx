@@ -200,6 +200,12 @@ Logcat log output to file is an optional feature. Modified the six function butt
 ### 1. Knowledge base content now supports editing after saving
 ### 2. Added local tool toggle feature at the bottom of the chat input box
 
+# 1.6.25
+### 1. Added feature to save provider-generated QR codes directly to local storage, optimized QR code generation logic
+### 2. Optimized the display of Settings-Provider-Any Provider-API Key, now supports clicking the eye icon on the right side of the API Key input box to toggle whether to blur the API Key display
+### 3. When MCP service is enabled, added an entry button to the right of the "MCP Server" text on the page that pops up after clicking the MCP icon at the bottom of the chat dialog, clicking it will jump to the MCP settings, making it more convenient for users
+
+
 I feel like writing the changelog in release is inconvenient so I wrote it in readme.md
 
 If you like this project, please give it a ⭐Star

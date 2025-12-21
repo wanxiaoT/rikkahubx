@@ -58,6 +58,9 @@
   <string name="chat_page_export_image">Export as Image</string>
   <string name="chat_page_export_image_desc">Export conversation as PNG image</string>
   <string name="chat_page_export_image_expand_reasoning">Expand Reasoning</string>
+  <string name="chat_page_save_to_gallery">Save to Gallery</string>
+  <string name="chat_page_save_to_gallery_desc">Save conversation as PNG image to DCIM/RikkaHubX</string>
+  <string name="chat_page_save_to_gallery_success">Saved to gallery</string>
   <string name="chat_page_export_success">Exported to %1$s</string>
   <string name="chat_page_export_share_via">Share via</string>
 

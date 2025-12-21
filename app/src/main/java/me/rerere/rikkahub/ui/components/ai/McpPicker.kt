@@ -17,6 +17,7 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -39,8 +40,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.composables.icons.lucide.CircleAlert
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.MessageSquareOff
+import com.composables.icons.lucide.Settings
 import com.composables.icons.lucide.Terminal
 import me.rerere.rikkahub.R
+import me.rerere.rikkahub.Screen
 import me.rerere.rikkahub.data.ai.mcp.McpManager
 import me.rerere.rikkahub.data.ai.mcp.McpServerConfig
 import me.rerere.rikkahub.data.ai.mcp.McpStatus
@@ -48,6 +51,7 @@ import me.rerere.rikkahub.data.model.Assistant
 import me.rerere.rikkahub.ui.components.ui.Tag
 import me.rerere.rikkahub.ui.components.ui.TagType
 import me.rerere.rikkahub.ui.components.ui.ToggleSurface
+import me.rerere.rikkahub.ui.context.LocalNavController
 import org.koin.compose.koinInject
 
 @Composable
@@ -108,6 +112,7 @@ fun McpPickerButton(
         }
     }
     if (showMcpPicker) {
+        val navController = LocalNavController.current
         ModalBottomSheet(
             onDismissRequest = { showMcpPicker = false },
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -120,12 +125,30 @@ fun McpPickerButton(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Text(
-                    text = stringResource(id = R.string.mcp_picker_title),
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold
+                // 标题栏：标题 + 设置按钮
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.mcp_picker_title),
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.Bold
+                        )
                     )
-                )
+                    IconButton(
+                        onClick = {
+                            navController.navigate(Screen.SettingMcp)
+                            showMcpPicker = false
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Lucide.Settings,
+                            contentDescription = "MCP Settings"
+                        )
+                    }
+                }
                 AnimatedVisibility(loading) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,

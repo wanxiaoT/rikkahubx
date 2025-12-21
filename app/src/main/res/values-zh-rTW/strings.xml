@@ -202,6 +202,9 @@
   <string name="chat_page_export_image">匯出為圖片</string>
   <string name="chat_page_export_image_desc">將對話匯出為PNG圖片</string>
   <string name="chat_page_export_image_expand_reasoning">展開思維過程</string>
+  <string name="chat_page_save_to_gallery">儲存到相簿</string>
+  <string name="chat_page_save_to_gallery_desc">將對話儲存為PNG圖片到DCIM/RikkaHubX</string>
+  <string name="chat_page_save_to_gallery_success">已儲存到相簿</string>
   <string name="chat_page_export_markdown">Markdown</string>
   <string name="chat_page_export_markdown_desc">將對話匯出為markdown檔案</string>
   <string name="chat_page_export_share_via">分享方式</string>

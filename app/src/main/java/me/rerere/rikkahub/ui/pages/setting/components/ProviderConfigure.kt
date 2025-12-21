@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SegmentedButton
@@ -13,10 +15,17 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.composables.icons.lucide.Eye
+import com.composables.icons.lucide.EyeOff
+import com.composables.icons.lucide.Lucide
 import com.dokar.sonner.ToastType
 import me.rerere.ai.provider.ProviderSetting
 import me.rerere.rikkahub.R
@@ -25,6 +34,17 @@ import me.rerere.rikkahub.ui.theme.JetbrainsMono
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
+
+/**
+ * Mask API Key to show only first 3 and last 3 characters
+ * Example: "sk-abcdefghijklmnopqrstuvwxyz" -> "sk-*******xyz"
+ */
+fun maskApiKey(apiKey: String): String {
+    if (apiKey.length <= 6) return apiKey
+    val prefix = apiKey.take(3)
+    val suffix = apiKey.takeLast(3)
+    return "$prefix*******$suffix"
+}
 
 @Composable
 fun ProviderConfigure(
@@ -99,6 +119,7 @@ private fun ColumnScope.ProviderConfigureOpenAI(
     onEdit: (provider: ProviderSetting.OpenAI) -> Unit
 ) {
     val toaster = LocalToaster.current
+    var isApiKeyMasked by remember { mutableStateOf(false) }
 
     provider.description()
 
@@ -126,9 +147,19 @@ private fun ColumnScope.ProviderConfigureOpenAI(
     )
 
     OutlinedTextField(
-        value = if (provider.multiKeyEnabled) "" else provider.apiKey,
+        value = if (provider.multiKeyEnabled) {
+            ""
+        } else if (isApiKeyMasked && provider.apiKey.isNotBlank()) {
+            maskApiKey(provider.apiKey)
+        } else {
+            provider.apiKey
+        },
         onValueChange = {
             onEdit(provider.copy(apiKey = it.trim()))
+            // Reset mask state when user edits
+            if (isApiKeyMasked) {
+                isApiKeyMasked = false
+            }
         },
         label = {
             Text(stringResource(id = R.string.setting_provider_page_api_key))
@@ -138,6 +169,18 @@ private fun ColumnScope.ProviderConfigureOpenAI(
         enabled = !provider.multiKeyEnabled,
         placeholder = if (provider.multiKeyEnabled) {
             { Text(stringResource(id = R.string.setting_provider_page_api_key_disabled_by_multi_key)) }
+        } else null,
+        trailingIcon = if (!provider.multiKeyEnabled && provider.apiKey.isNotBlank()) {
+            {
+                IconButton(
+                    onClick = { isApiKeyMasked = !isApiKeyMasked }
+                ) {
+                    Icon(
+                        imageVector = if (isApiKeyMasked) Lucide.EyeOff else Lucide.Eye,
+                        contentDescription = if (isApiKeyMasked) "Show API Key" else "Hide API Key"
+                    )
+                }
+            }
         } else null
     )
 
@@ -192,6 +235,8 @@ private fun ColumnScope.ProviderConfigureClaude(
     provider: ProviderSetting.Claude,
     onEdit: (provider: ProviderSetting.Claude) -> Unit
 ) {
+    var isApiKeyMasked by remember { mutableStateOf(false) }
+
     provider.description()
 
     Row(
@@ -219,9 +264,19 @@ private fun ColumnScope.ProviderConfigureClaude(
     )
 
     OutlinedTextField(
-        value = if (provider.multiKeyEnabled) "" else provider.apiKey,
+        value = if (provider.multiKeyEnabled) {
+            ""
+        } else if (isApiKeyMasked && provider.apiKey.isNotBlank()) {
+            maskApiKey(provider.apiKey)
+        } else {
+            provider.apiKey
+        },
         onValueChange = {
             onEdit(provider.copy(apiKey = it.trim()))
+            // Reset mask state when user edits
+            if (isApiKeyMasked) {
+                isApiKeyMasked = false
+            }
         },
         label = {
             Text(stringResource(id = R.string.setting_provider_page_api_key))
@@ -230,6 +285,18 @@ private fun ColumnScope.ProviderConfigureClaude(
         enabled = !provider.multiKeyEnabled,
         placeholder = if (provider.multiKeyEnabled) {
             { Text(stringResource(id = R.string.setting_provider_page_api_key_disabled_by_multi_key)) }
+        } else null,
+        trailingIcon = if (!provider.multiKeyEnabled && provider.apiKey.isNotBlank()) {
+            {
+                IconButton(
+                    onClick = { isApiKeyMasked = !isApiKeyMasked }
+                ) {
+                    Icon(
+                        imageVector = if (isApiKeyMasked) Lucide.EyeOff else Lucide.Eye,
+                        contentDescription = if (isApiKeyMasked) "Show API Key" else "Hide API Key"
+                    )
+                }
+            }
         } else null
     )
 
@@ -250,6 +317,8 @@ private fun ColumnScope.ProviderConfigureGoogle(
     provider: ProviderSetting.Google,
     onEdit: (provider: ProviderSetting.Google) -> Unit
 ) {
+    var isApiKeyMasked by remember { mutableStateOf(false) }
+
     provider.description()
 
     Row(
@@ -289,9 +358,19 @@ private fun ColumnScope.ProviderConfigureGoogle(
 
     if (!provider.vertexAI) {
         OutlinedTextField(
-            value = if (provider.multiKeyEnabled) "" else provider.apiKey,
+            value = if (provider.multiKeyEnabled) {
+                ""
+            } else if (isApiKeyMasked && provider.apiKey.isNotBlank()) {
+                maskApiKey(provider.apiKey)
+            } else {
+                provider.apiKey
+            },
             onValueChange = {
                 onEdit(provider.copy(apiKey = it.trim()))
+                // Reset mask state when user edits
+                if (isApiKeyMasked) {
+                    isApiKeyMasked = false
+                }
             },
             label = {
                 Text(stringResource(id = R.string.setting_provider_page_api_key))
@@ -301,6 +380,18 @@ private fun ColumnScope.ProviderConfigureGoogle(
             enabled = !provider.multiKeyEnabled,
             placeholder = if (provider.multiKeyEnabled) {
                 { Text(stringResource(id = R.string.setting_provider_page_api_key_disabled_by_multi_key)) }
+            } else null,
+            trailingIcon = if (!provider.multiKeyEnabled && provider.apiKey.isNotBlank()) {
+                {
+                    IconButton(
+                        onClick = { isApiKeyMasked = !isApiKeyMasked }
+                    ) {
+                        Icon(
+                            imageVector = if (isApiKeyMasked) Lucide.EyeOff else Lucide.Eye,
+                            contentDescription = if (isApiKeyMasked) "Show API Key" else "Hide API Key"
+                        )
+                    }
+                }
             } else null
         )
 

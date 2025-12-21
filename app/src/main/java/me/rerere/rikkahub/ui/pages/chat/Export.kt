@@ -93,6 +93,7 @@ import me.rerere.rikkahub.utils.JsonInstant
 import me.rerere.rikkahub.utils.exportImage
 import me.rerere.rikkahub.utils.getActivity
 import me.rerere.rikkahub.utils.jsonPrimitiveOrNull
+import me.rerere.rikkahub.utils.saveImageToDCIM
 import me.rerere.rikkahub.utils.toLocalString
 import org.koin.compose.koinInject
 import java.io.FileOutputStream
@@ -224,6 +225,58 @@ fun ChatExportSheet(
                             }
                         }
                     }
+                }
+
+                val saveToGallerySuccessMessage =
+                    stringResource(id = R.string.chat_page_save_to_gallery_success)
+                OutlinedCard(
+                    onClick = {
+                        scope.launch {
+                            runCatching {
+                                saveToGallery(
+                                    context = context,
+                                    scope = scope,
+                                    density = density,
+                                    conversation = conversation,
+                                    messages = selectedMessages,
+                                    settings = settings,
+                                    options = imageExportOptions
+                                )
+                            }.onSuccess {
+                                if (it) {
+                                    toaster.show(
+                                        saveToGallerySuccessMessage,
+                                        type = ToastType.Success
+                                    )
+                                } else {
+                                    toaster.show(
+                                        message = "Failed to save to gallery",
+                                        type = ToastType.Error
+                                    )
+                                }
+                            }.onFailure {
+                                it.printStackTrace()
+                                toaster.show(
+                                    message = "Failed to save to gallery: ${it.message}",
+                                    type = ToastType.Error
+                                )
+                            }
+                        }
+                        onDismissRequest()
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    ListItem(
+                        headlineContent = {
+                            Text(stringResource(id = R.string.chat_page_save_to_gallery))
+                        },
+                        supportingContent = {
+                            Text(stringResource(id = R.string.chat_page_save_to_gallery_desc))
+                        },
+                        leadingContent = {
+                            Icon(Lucide.Image, contentDescription = null)
+                        }
+                    )
                 }
             }
         }
@@ -365,6 +418,54 @@ private suspend fun exportToImage(
         withContext(Dispatchers.Main) {
             Toast.makeText(context, "Failed to export image: ${e.message}", Toast.LENGTH_SHORT).show()
         }
+    } finally {
+        bitmap.recycle()
+    }
+}
+
+private suspend fun saveToGallery(
+    context: Context,
+    scope: CoroutineScope,
+    density: Density,
+    conversation: Conversation,
+    messages: List<UIMessage>,
+    settings: Settings,
+    options: ImageExportOptions = ImageExportOptions()
+): Boolean {
+    val filename = "chat-export-${LocalDateTime.now().toLocalString()}.png"
+    val composer = BitmapComposer(scope)
+    val activity = context.getActivity()
+    if (activity == null) {
+        withContext(Dispatchers.Main) {
+            Toast.makeText(context, "Failed to get activity", Toast.LENGTH_SHORT).show()
+        }
+        return false
+    }
+
+    val bitmap = composer.composableToBitmap(
+        activity = activity,
+        width = 540.dp,
+        screenDensity = density,
+        content = {
+            CompositionLocalProvider(LocalSettings provides settings) {
+                ExportedChatImage(
+                    conversation = conversation,
+                    messages = messages,
+                    options = options
+                )
+            }
+        }
+    )
+
+    return try {
+        val success = context.saveImageToDCIM(activity, bitmap, filename)
+        success
+    } catch (e: Exception) {
+        e.printStackTrace()
+        withContext(Dispatchers.Main) {
+            Toast.makeText(context, "Failed to save to gallery: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+        false
     } finally {
         bitmap.recycle()
     }

@@ -202,6 +202,9 @@
   <string name="chat_page_export_image">画像としてエクスポート</string>
   <string name="chat_page_export_image_desc">会話をPNG画像としてエクスポート</string>
   <string name="chat_page_export_image_expand_reasoning">思考過程を展開</string>
+  <string name="chat_page_save_to_gallery">ギャラリーに保存</string>
+  <string name="chat_page_save_to_gallery_desc">会話をPNG画像としてDCIM/RikkaHubXに保存</string>
+  <string name="chat_page_save_to_gallery_success">ギャラリーに保存しました</string>
   <string name="chat_page_export_markdown">Markdown</string>
   <string name="chat_page_export_markdown_desc">会話をmarkdownファイルとしてエクスポート</string>
   <string name="chat_page_export_share_via">共有方法</string>

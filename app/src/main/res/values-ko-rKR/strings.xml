@@ -202,6 +202,9 @@
   <string name="chat_page_export_image">이미지로 내보내기</string>
   <string name="chat_page_export_image_desc">대화를 PNG 이미지로 내보내기</string>
   <string name="chat_page_export_image_expand_reasoning">사고 과정 확장</string>
+  <string name="chat_page_save_to_gallery">갤러리에 저장</string>
+  <string name="chat_page_save_to_gallery_desc">대화를 PNG 이미지로 DCIM/RikkaHubX에 저장</string>
+  <string name="chat_page_save_to_gallery_success">갤러리에 저장됨</string>
   <string name="chat_page_export_markdown">Markdown</string>
   <string name="chat_page_export_markdown_desc">대화를 마크다운 파일로 내보내기</string>
   <string name="chat_page_export_share_via">공유 방법</string>
