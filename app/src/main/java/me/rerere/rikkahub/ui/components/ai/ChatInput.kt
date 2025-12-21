@@ -279,6 +279,14 @@ fun ChatInput(
                             },
                         )
                     }
+
+                    // Local Tools
+                    LocalToolsPickerButton(
+                        assistant = assistant,
+                        onUpdateAssistant = {
+                            onUpdateAssistant(it)
+                        }
+                    )
                 }
 
                 // Insert files

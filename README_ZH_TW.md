@@ -196,6 +196,9 @@ Logcat日誌輸出為檔案為可選選項，修改Logcat日誌頁面右上角�
 | 負載均衡策略     | KeyManagementConfig.strategy         | settings.json | ApiKeyConfig.kt    |
 | 輪詢索引         | KeyManagementConfig.roundRobinIndex  | settings.json | ApiKeyConfig.kt    |
 
+# 1.6.24
+### 1.知識庫中的內容支援儲存後修改
+### 2.聊天輸入框底部添加了本地工具開關功能
 
 我感覺把更新日誌寫release裡面不方便我就寫readme.md了
 

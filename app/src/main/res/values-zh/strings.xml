@@ -796,9 +796,11 @@
   <string name="knowledge_base_empty">暂无知识库</string>
   <string name="knowledge_base_empty_hint">点击 + 创建新的知识库</string>
   <string name="create_knowledge_base">创建知识库</string>
+  <string name="edit_knowledge_base">编辑知识库</string>
   <string name="delete_knowledge_base">删除知识库</string>
   <string name="delete_knowledge_base_confirm">确定要删除「%1$s」吗？此操作无法撤销。</string>
   <string name="knowledge_base_created">知识库已创建</string>
+  <string name="knowledge_base_updated">知识库已更新</string>
   <string name="knowledge_base_deleted">知识库已删除</string>
   <string name="knowledge_base_name_hint">输入知识库名称</string>
   <string name="knowledge_base_description_hint">输入描述（可选）</string>
@@ -814,9 +816,13 @@
   <string name="add_file">添加文件</string>
   <string name="add_note">添加笔记</string>
   <string name="add_url">添加网址</string>
+  <string name="edit_note">编辑笔记</string>
+  <string name="edit_url">编辑网址</string>
   <string name="file_added">文件已添加</string>
   <string name="note_added">笔记已添加</string>
+  <string name="note_updated">笔记已更新</string>
   <string name="url_added">网址已添加</string>
+  <string name="url_updated">网址已更新</string>
   <string name="status_pending">待处理</string>
   <string name="status_processing">处理中</string>
   <string name="status_completed">已完成</string>
@@ -825,9 +831,18 @@
   <string name="search_query_hint">输入搜索内容</string>
   <string name="search_results">找到 %1$d 条结果</string>
   <string name="name">名称</string>
+
+  <!-- Local Tools -->
+  <string name="local_tools">本地工具</string>
+  <string name="local_tools_picker_title">本地工具</string>
+  <string name="local_tools_picker_desc">启用助手可使用的本地工具。这些工具在您的设备上运行。</string>
+  <string name="local_tools_enabled">本地工具已启用</string>
+  <string name="local_tools_disabled">本地工具已禁用</string>
+
   <string name="content">内容</string>
   <string name="description">描述</string>
   <string name="optional">可选</string>
   <string name="create">创建</string>
+  <string name="save">保存</string>
   <string name="close">关闭</string>
 </resources>

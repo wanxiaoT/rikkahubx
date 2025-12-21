@@ -681,9 +681,11 @@
   <string name="knowledge_base_empty">暫無知識庫</string>
   <string name="knowledge_base_empty_hint">點擊 + 建立新的知識庫</string>
   <string name="create_knowledge_base">建立知識庫</string>
+  <string name="edit_knowledge_base">編輯知識庫</string>
   <string name="delete_knowledge_base">刪除知識庫</string>
   <string name="delete_knowledge_base_confirm">確定要刪除「%1$s」嗎？此操作無法復原。</string>
   <string name="knowledge_base_created">知識庫已建立</string>
+  <string name="knowledge_base_updated">知識庫已更新</string>
   <string name="knowledge_base_deleted">知識庫已刪除</string>
   <string name="knowledge_base_name_hint">輸入知識庫名稱</string>
   <string name="knowledge_base_description_hint">輸入描述（選填）</string>
@@ -699,9 +701,13 @@
   <string name="add_file">新增檔案</string>
   <string name="add_note">新增筆記</string>
   <string name="add_url">新增網址</string>
+  <string name="edit_note">編輯筆記</string>
+  <string name="edit_url">編輯網址</string>
   <string name="file_added">檔案已新增</string>
   <string name="note_added">筆記已新增</string>
+  <string name="note_updated">筆記已更新</string>
   <string name="url_added">網址已新增</string>
+  <string name="url_updated">網址已更新</string>
   <string name="status_pending">待處理</string>
   <string name="status_processing">處理中</string>
   <string name="status_completed">已完成</string>
@@ -710,10 +716,19 @@
   <string name="search_query_hint">輸入搜尋內容</string>
   <string name="search_results">找到 %1$d 條結果</string>
   <string name="name">名稱</string>
+
+  <!-- Local Tools -->
+  <string name="local_tools">本機工具</string>
+  <string name="local_tools_picker_title">本機工具</string>
+  <string name="local_tools_picker_desc">啟用助手可使用的本機工具。這些工具在您的裝置上執行。</string>
+  <string name="local_tools_enabled">本機工具已啟用</string>
+  <string name="local_tools_disabled">本機工具已停用</string>
+
   <string name="content">內容</string>
   <string name="description">描述</string>
   <string name="optional">選填</string>
   <string name="create">建立</string>
+  <string name="save">儲存</string>
   <string name="close">關閉</string>
   <string name="setting_page_language">語言</string>
   <string name="setting_page_language_desc">設定應用程式顯示語言</string>

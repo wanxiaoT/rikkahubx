@@ -882,9 +882,11 @@
   <string name="knowledge_base_empty">No knowledge bases</string>
   <string name="knowledge_base_empty_hint">Click + to create a new knowledge base</string>
   <string name="create_knowledge_base">Create Knowledge Base</string>
+  <string name="edit_knowledge_base">Edit Knowledge Base</string>
   <string name="delete_knowledge_base">Delete Knowledge Base</string>
   <string name="delete_knowledge_base_confirm">Are you sure you want to delete \"%1$s\"? This action cannot be undone.</string>
   <string name="knowledge_base_created">Knowledge base created</string>
+  <string name="knowledge_base_updated">Knowledge base updated</string>
   <string name="knowledge_base_deleted">Knowledge base deleted</string>
   <string name="knowledge_base_name_hint">Enter knowledge base name</string>
   <string name="knowledge_base_description_hint">Enter description (optional)</string>
@@ -900,9 +902,13 @@
   <string name="add_file">Add File</string>
   <string name="add_note">Add Note</string>
   <string name="add_url">Add URL</string>
+  <string name="edit_note">Edit Note</string>
+  <string name="edit_url">Edit URL</string>
   <string name="file_added">File added</string>
   <string name="note_added">Note added</string>
+  <string name="note_updated">Note updated</string>
   <string name="url_added">URL added</string>
+  <string name="url_updated">URL updated</string>
   <string name="status_pending">Pending</string>
   <string name="status_processing">Processing</string>
   <string name="status_completed">Completed</string>
@@ -911,9 +917,17 @@
   <string name="search_query_hint">Enter search query</string>
   <string name="search_results">%1$d results found</string>
   <string name="name">Name</string>
+
+  <!-- Local Tools -->
+  <string name="local_tools">Local Tools</string>
+  <string name="local_tools_picker_title">Local Tools</string>
+  <string name="local_tools_picker_desc">Enable local tools for the assistant to use. These tools run on your device.</string>
+  <string name="local_tools_enabled">Local tools enabled</string>
+  <string name="local_tools_disabled">Local tools disabled</string>
   <string name="content">Content</string>
   <string name="description">Description</string>
   <string name="optional">optional</string>
   <string name="create">Create</string>
+  <string name="save">Save</string>
   <string name="close">Close</string>
 </resources>

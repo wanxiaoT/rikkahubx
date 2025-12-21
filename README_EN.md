@@ -196,6 +196,9 @@ Logcat log output to file is an optional feature. Modified the six function butt
 | Load balancing strategy | KeyManagementConfig.strategy     | settings.json | ApiKeyConfig.kt    |
 | Round-robin index   | KeyManagementConfig.roundRobinIndex  | settings.json | ApiKeyConfig.kt    |
 
+# 1.6.24
+### 1. Knowledge base content now supports editing after saving
+### 2. Added local tool toggle feature at the bottom of the chat input box
 
 I feel like writing the changelog in release is inconvenient so I wrote it in readme.md
 
