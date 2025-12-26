@@ -218,6 +218,7 @@
   <string name="chat_page_no_conversations">沒有對話記錄</string>
   <string name="chat_page_recent">最近</string>
   <string name="chat_page_regenerate_title">重新生成標題</string>
+  <string name="chat_page_export">匯出</string>
   <string name="chat_page_save">保存</string>
   <string name="chat_page_scroll_to_bottom">滾動到底部</string>
   <string name="chat_page_search_placeholder">搜尋對話記錄</string>
@@ -371,6 +372,20 @@
   <string name="setting_display_page_code_block_auto_collapse_title">程式碼區塊自動摺疊</string>
   <string name="setting_display_page_code_block_auto_wrap_desc">自動換行程式碼區塊中的長行</string>
   <string name="setting_display_page_code_block_auto_wrap_title">程式碼區塊自動換行</string>
+  <string name="setting_display_page_input_bar_buttons_title">輸入欄按鈕</string>
+  <string name="setting_display_page_input_bar_buttons_headline">自訂輸入欄</string>
+  <string name="setting_display_page_input_bar_buttons_desc">選擇在聊天輸入欄中顯示哪些按鈕</string>
+  <string name="setting_display_page_input_bar_model">模型</string>
+  <string name="setting_display_page_input_bar_search">搜尋</string>
+  <string name="setting_display_page_input_bar_thinking">深度思考</string>
+  <string name="setting_display_page_input_bar_mcp">MCP</string>
+  <string name="setting_display_page_input_bar_tools">工具</string>
+  <string name="setting_display_page_input_bar_translate">翻譯</string>
+  <string name="translate_picker_title">翻譯</string>
+  <string name="translate_picker_source_text">來源文字</string>
+  <string name="translate_picker_source_placeholder">輸入要翻譯的文字…</string>
+  <string name="translate_picker_translated_text">翻譯結果</string>
+  <string name="translate_picker_translated_placeholder">翻譯結果將顯示在這裡…</string>
   <string name="setting_display_page_create_new_conversation_on_start_desc">當應用程式啟動時，自動建立一個新的對話</string>
   <string name="setting_display_page_create_new_conversation_on_start_title">啟動時新建對話</string>
   <string name="setting_display_page_developer_mode">開發者模式</string>
@@ -736,4 +751,11 @@
   <string name="setting_page_language">語言</string>
   <string name="setting_page_language_desc">設定應用程式顯示語言</string>
   <string name="setting_page_language_system">跟隨系統</string>
+
+  <!-- Share Sheet -->
+  <string name="share_sheet_export_options">匯出選項</string>
+  <string name="share_sheet_include_models">包含模型清單（%d 個模型）</string>
+  <string name="share_sheet_include_multi_key">包含多 Key 設定（%d 個 Key）</string>
+  <string name="share_sheet_estimated_size">預估大小：</string>
+  <string name="share_sheet_size_warning">⚠️ 資料較大，掃碼可能較慢</string>
 </resources>

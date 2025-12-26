@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import me.rerere.ai.provider.Model
 import me.rerere.ai.provider.ProviderSetting
 import me.rerere.rikkahub.AppScope
@@ -353,7 +354,52 @@ data class DisplaySetting(
     val enableNotificationOnMessageGeneration: Boolean = false,
     val codeBlockAutoWrap: Boolean = false,
     val codeBlockAutoCollapse: Boolean = false,
+    val chatInputButtons: ChatInputButtons = ChatInputButtons(),
 )
+
+@Serializable
+enum class InputButtonType {
+    MODEL_SELECTOR,
+    SEARCH_PICKER,
+    REASONING_BUTTON,
+    MCP_PICKER,
+    LOCAL_TOOLS_PICKER,
+    TRANSLATE_PICKER
+}
+
+@Serializable
+data class InputButtonItem(
+    val type: InputButtonType,
+    val enabled: Boolean = true
+)
+
+@Serializable
+data class ChatInputButtons(
+    val buttons: List<InputButtonItem> = DEFAULT_INPUT_BUTTONS
+) {
+    companion object {
+        val DEFAULT_INPUT_BUTTONS = listOf(
+            InputButtonItem(InputButtonType.MODEL_SELECTOR, true),
+            InputButtonItem(InputButtonType.SEARCH_PICKER, true),
+            InputButtonItem(InputButtonType.REASONING_BUTTON, true),
+            InputButtonItem(InputButtonType.MCP_PICKER, true),
+            InputButtonItem(InputButtonType.LOCAL_TOOLS_PICKER, true),
+            InputButtonItem(InputButtonType.TRANSLATE_PICKER, true),
+        )
+    }
+
+    // Backward compatibility properties
+    val showModelSelector: Boolean
+        get() = buttons.find { it.type == InputButtonType.MODEL_SELECTOR }?.enabled ?: true
+    val showSearchPicker: Boolean
+        get() = buttons.find { it.type == InputButtonType.SEARCH_PICKER }?.enabled ?: true
+    val showReasoningButton: Boolean
+        get() = buttons.find { it.type == InputButtonType.REASONING_BUTTON }?.enabled ?: true
+    val showMcpPicker: Boolean
+        get() = buttons.find { it.type == InputButtonType.MCP_PICKER }?.enabled ?: true
+    val showLocalToolsPicker: Boolean
+        get() = buttons.find { it.type == InputButtonType.LOCAL_TOOLS_PICKER }?.enabled ?: true
+}
 
 @Serializable
 data class WebDavConfig(

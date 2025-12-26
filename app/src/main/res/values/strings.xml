@@ -39,6 +39,7 @@
   <string name="chat_page_date_format_same_year">%1$d/%2$d</string>
   <string name="chat_page_date_format_different_year">%1$d/%2$d/%3$d</string>
   <string name="chat_page_regenerate_title">Regenerate title</string>
+  <string name="chat_page_export">Export</string>
   <string name="chat_page_delete">Delete</string>
   <string name="chat_page_history">Chat History</string>
   <string name="chat_page_scroll_to_bottom">Scroll to bottom</string>
@@ -800,6 +801,20 @@
   <string name="setting_display_page_code_block_auto_wrap_desc">Automatically wrap long lines in code blocks</string>
   <string name="setting_display_page_code_block_auto_collapse_title">Code Block Auto Collapse</string>
   <string name="setting_display_page_code_block_auto_collapse_desc">Automatically collapse code blocks by default</string>
+  <string name="setting_display_page_input_bar_buttons_title">Input Bar Buttons</string>
+  <string name="setting_display_page_input_bar_buttons_headline">Customize Input Bar</string>
+  <string name="setting_display_page_input_bar_buttons_desc">Select which buttons to display in the chat input bar</string>
+  <string name="setting_display_page_input_bar_model">Model</string>
+  <string name="setting_display_page_input_bar_search">Search</string>
+  <string name="setting_display_page_input_bar_thinking">Thinking</string>
+  <string name="setting_display_page_input_bar_mcp">MCP</string>
+  <string name="setting_display_page_input_bar_tools">Tools</string>
+  <string name="setting_display_page_input_bar_translate">Translate</string>
+  <string name="translate_picker_title">Translation</string>
+  <string name="translate_picker_source_text">Source Text</string>
+  <string name="translate_picker_source_placeholder">Enter text to translate…</string>
+  <string name="translate_picker_translated_text">Translated Text</string>
+  <string name="translate_picker_translated_placeholder">Translation will appear here…</string>
     <string name="video">Video</string>
   <string name="audio">Audio</string>
     <string name="setting_provider_page_avaliable_models">Avaliable Models</string>
@@ -933,4 +948,11 @@
   <string name="create">Create</string>
   <string name="save">Save</string>
   <string name="close">Close</string>
+
+  <!-- Share Sheet -->
+  <string name="share_sheet_export_options">Export Options</string>
+  <string name="share_sheet_include_models">Include model list (%d models)</string>
+  <string name="share_sheet_include_multi_key">Include multi-key config (%d keys)</string>
+  <string name="share_sheet_estimated_size">Estimated size:</string>
+  <string name="share_sheet_size_warning">⚠️ Data is large, scanning may be slow</string>
 </resources>

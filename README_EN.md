@@ -1,4 +1,4 @@
-[简体中文](README.md) | [繁體中文](README_ZH_TW.md) | English
+[简体中文](README.md) | [繁體中文（中國台灣）](README_ZH_TW.md) | English
 
 <div align="center">
   <img src="docs/icon.png" alt="App Icon" width="100" />
@@ -205,6 +205,14 @@ Logcat log output to file is an optional feature. Modified the six function butt
 ### 2. Optimized the display of Settings-Provider-Any Provider-API Key, now supports clicking the eye icon on the right side of the API Key input box to toggle whether to blur the API Key display
 ### 3. When MCP service is enabled, added an entry button to the right of the "MCP Server" text on the page that pops up after clicking the MCP icon at the bottom of the chat dialog, clicking it will jump to the MCP settings, making it more convenient for users
 
+# 1.6.26
+### 1. Added bottom translation button
+### 2. Added chat history import/export feature
+### 3. Modified update info display logic, now update info won't automatically float above user info bar, but floats up and down with chat history
+### 4. In display settings, added custom input bar buttons, can adjust order and visibility
+### 5. Added provider QR code sharing with provider key and model list export feature
+### 6. Fixed the issue where importing a provider from gallery would crash if the device already has that provider
+### 7. Modified update logic, using wanxiaoT's server to handle updates, no more confusion
 
 I feel like writing the changelog in release is inconvenient so I wrote it in readme.md
 

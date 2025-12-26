@@ -58,6 +58,7 @@ import coil3.request.crossfade
 import com.composables.icons.lucide.BookDashed
 import com.composables.icons.lucide.BookHeart
 import com.composables.icons.lucide.Earth
+import com.composables.icons.lucide.FileCode
 import com.composables.icons.lucide.FileText
 import com.composables.icons.lucide.Image
 import com.composables.icons.lucide.Lucide
@@ -128,6 +129,31 @@ fun ChatExportSheet(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(text = stringResource(id = R.string.chat_page_export_format))
+
+                val jsonSuccessMessage = stringResource(id = R.string.chat_page_export_success, "JSON")
+                OutlinedCard(
+                    onClick = {
+                        exportToJson(context, conversation)
+                        toaster.show(
+                            jsonSuccessMessage,
+                            type = ToastType.Success
+                        )
+                        onDismissRequest()
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    ListItem(
+                        headlineContent = {
+                            Text("Export as JSON")
+                        },
+                        supportingContent = {
+                            Text("Export conversation data as JSON file for backup and import")
+                        },
+                        leadingContent = {
+                            Icon(Lucide.FileCode, contentDescription = null)
+                        }
+                    )
+                }
 
                 val markdownSuccessMessage =
                     stringResource(id = R.string.chat_page_export_success, "Markdown")
@@ -280,6 +306,40 @@ fun ChatExportSheet(
                 }
             }
         }
+    }
+}
+
+fun exportToJson(
+    context: Context,
+    conversation: Conversation
+) {
+    val filename = "chat-export-${LocalDateTime.now().toLocalString()}.json"
+
+    try {
+        val jsonString = JsonInstant.encodeToString(Conversation.serializer(), conversation)
+
+        val dir = context.appTempFolder
+        val file = dir.resolve(filename)
+        if (!file.exists()) {
+            file.createNewFile()
+        } else {
+            file.delete()
+            file.createNewFile()
+        }
+        FileOutputStream(file).use {
+            it.write(jsonString.toByteArray())
+        }
+
+        // Share the file
+        val uri = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.fileprovider",
+            file
+        )
+        shareFile(context, uri, "application/json")
+
+    } catch (e: Exception) {
+        e.printStackTrace()
     }
 }
 

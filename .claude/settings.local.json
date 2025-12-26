@@ -12,7 +12,9 @@
       "Bash(git diff:*)",
       "Bash(git commit:*)",
       "Bash(gh:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(set JAVA_HOME=C:Program FilesAndroidAndroid Studiojbr)",
+      "WebFetch(domain:updates.rikka-ai.com)"
     ],
     "deny": []
   }

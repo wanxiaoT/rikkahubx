@@ -220,73 +220,90 @@ fun ChatInput(
                         .horizontalScroll(rememberScrollState()),
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    // Model Picker
-                    ModelSelector(
-                        modelId = assistant.chatModelId ?: settings.chatModelId,
-                        providers = settings.providers,
-                        onSelect = {
-                            onUpdateChatModel(it)
-                            dismissExpand()
-                        },
-                        type = ModelType.CHAT,
-                        onlyIcon = true,
-                        modifier = Modifier,
-                    )
+                    // Render buttons in configured order
+                    settings.displaySetting.chatInputButtons.buttons.forEach { buttonItem ->
+                        if (!buttonItem.enabled) return@forEach
 
-                    // Search
-                    val enableSearchMsg = stringResource(R.string.web_search_enabled)
-                    val disableSearchMsg = stringResource(R.string.web_search_disabled)
-                    val chatModel = settings.getCurrentChatModel()
-                    SearchPickerButton(
-                        enableSearch = enableSearch,
-                        settings = settings,
-                        onToggleSearch = { enabled ->
-                            onToggleSearch(enabled)
-                            toaster.show(
-                                message = if (enabled) enableSearchMsg else disableSearchMsg,
-                                duration = 1.seconds,
-                                type = if (enabled) {
-                                    ToastType.Success
-                                } else {
-                                    ToastType.Normal
+                        when (buttonItem.type) {
+                            me.rerere.rikkahub.data.datastore.InputButtonType.MODEL_SELECTOR -> {
+                                ModelSelector(
+                                    modelId = assistant.chatModelId ?: settings.chatModelId,
+                                    providers = settings.providers,
+                                    onSelect = {
+                                        onUpdateChatModel(it)
+                                        dismissExpand()
+                                    },
+                                    type = ModelType.CHAT,
+                                    onlyIcon = true,
+                                    modifier = Modifier,
+                                )
+                            }
+                            me.rerere.rikkahub.data.datastore.InputButtonType.SEARCH_PICKER -> {
+                                val enableSearchMsg = stringResource(R.string.web_search_enabled)
+                                val disableSearchMsg = stringResource(R.string.web_search_disabled)
+                                val chatModel = settings.getCurrentChatModel()
+                                SearchPickerButton(
+                                    enableSearch = enableSearch,
+                                    settings = settings,
+                                    onToggleSearch = { enabled ->
+                                        onToggleSearch(enabled)
+                                        toaster.show(
+                                            message = if (enabled) enableSearchMsg else disableSearchMsg,
+                                            duration = 1.seconds,
+                                            type = if (enabled) {
+                                                ToastType.Success
+                                            } else {
+                                                ToastType.Normal
+                                            }
+                                        )
+                                    },
+                                    onUpdateSearchService = onUpdateSearchService,
+                                    model = chatModel,
+                                )
+                            }
+                            me.rerere.rikkahub.data.datastore.InputButtonType.REASONING_BUTTON -> {
+                                val model = settings.getCurrentChatModel()
+                                if (model?.abilities?.contains(ModelAbility.REASONING) == true) {
+                                    ReasoningButton(
+                                        reasoningTokens = assistant.thinkingBudget ?: 0,
+                                        onUpdateReasoningTokens = {
+                                            onUpdateAssistant(assistant.copy(thinkingBudget = it))
+                                        },
+                                        onlyIcon = true,
+                                    )
                                 }
-                            )
-                        },
-                        onUpdateSearchService = onUpdateSearchService,
-                        model = chatModel,
-                    )
-
-                    // Reasoning
-                    val model = settings.getCurrentChatModel()
-                    if (model?.abilities?.contains(ModelAbility.REASONING) == true) {
-                        ReasoningButton(
-                            reasoningTokens = assistant.thinkingBudget ?: 0,
-                            onUpdateReasoningTokens = {
-                                onUpdateAssistant(assistant.copy(thinkingBudget = it))
-                            },
-                            onlyIcon = true,
-                        )
-                    }
-
-                    // MCP
-                    if (settings.mcpServers.isNotEmpty()) {
-                        McpPickerButton(
-                            assistant = assistant,
-                            servers = settings.mcpServers,
-                            mcpManager = mcpManager,
-                            onUpdateAssistant = {
-                                onUpdateAssistant(it)
-                            },
-                        )
-                    }
-
-                    // Local Tools
-                    LocalToolsPickerButton(
-                        assistant = assistant,
-                        onUpdateAssistant = {
-                            onUpdateAssistant(it)
+                            }
+                            me.rerere.rikkahub.data.datastore.InputButtonType.MCP_PICKER -> {
+                                if (settings.mcpServers.isNotEmpty()) {
+                                    McpPickerButton(
+                                        assistant = assistant,
+                                        servers = settings.mcpServers,
+                                        mcpManager = mcpManager,
+                                        onUpdateAssistant = {
+                                            onUpdateAssistant(it)
+                                        },
+                                    )
+                                }
+                            }
+                            me.rerere.rikkahub.data.datastore.InputButtonType.LOCAL_TOOLS_PICKER -> {
+                                LocalToolsPickerButton(
+                                    assistant = assistant,
+                                    onUpdateAssistant = {
+                                        onUpdateAssistant(it)
+                                    }
+                                )
+                            }
+                            me.rerere.rikkahub.data.datastore.InputButtonType.TRANSLATE_PICKER -> {
+                                TranslatePickerButton(
+                                    chatModel = settings.getCurrentChatModel(),
+                                    providers = settings.providers,
+                                    onUpdateTranslateModel = { model ->
+                                        onUpdateChatModel(model)
+                                    }
+                                )
+                            }
                         }
-                    )
+                    }
                 }
 
                 // Insert files

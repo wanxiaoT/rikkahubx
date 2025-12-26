@@ -22,7 +22,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,10 +36,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.composables.icons.lucide.Drama
+import com.composables.icons.lucide.Import
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Pencil
 import com.composables.icons.lucide.Settings
 import com.composables.icons.lucide.Sparkles
+import com.dokar.sonner.ToastType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import me.rerere.rikkahub.R
@@ -49,11 +54,13 @@ import me.rerere.rikkahub.ui.components.ui.Greeting
 import me.rerere.rikkahub.ui.components.ui.Tooltip
 import me.rerere.rikkahub.ui.components.ui.UIAvatar
 import me.rerere.rikkahub.ui.components.ui.UpdateCard
+import me.rerere.rikkahub.ui.context.LocalToaster
 import me.rerere.rikkahub.ui.hooks.EditStateContent
 import me.rerere.rikkahub.ui.hooks.readBooleanPreference
 import me.rerere.rikkahub.ui.hooks.rememberIsPlayStoreVersion
 import me.rerere.rikkahub.ui.hooks.useEditState
 import me.rerere.rikkahub.ui.modifier.onClick
+import me.rerere.rikkahub.utils.JsonInstant
 import me.rerere.rikkahub.utils.navigateToChatPage
 import me.rerere.rikkahub.utils.toDp
 import org.koin.compose.koinInject
@@ -70,6 +77,7 @@ fun ChatDrawerContent(
     val context = LocalContext.current
     val isPlayStore = rememberIsPlayStoreVersion()
     val repo = koinInject<ConversationRepository>()
+    val toaster = LocalToaster.current
 
     val conversations = vm.conversations.collectAsLazyPagingItems()
     val searchQuery by vm.searchQuery.collectAsStateWithLifecycle()
@@ -77,6 +85,32 @@ fun ChatDrawerContent(
     val conversationJobs by vm.conversationJobs.collectAsStateWithLifecycle(
         initialValue = emptyMap(),
     )
+
+    // File picker launcher for import
+    var showImportDialog by remember { mutableStateOf(false) }
+    val importLauncher = androidx.activity.compose.rememberLauncherForActivityResult(
+        contract = androidx.activity.result.contract.ActivityResultContracts.GetContent()
+    ) { uri ->
+        uri?.let {
+            scope.launch {
+                try {
+                    val inputStream = context.contentResolver.openInputStream(it)
+                    val jsonString = inputStream?.bufferedReader()?.use { reader -> reader.readText() }
+                    if (jsonString != null) {
+                        val conversation = JsonInstant.decodeFromString<Conversation>(jsonString)
+                        // Generate a new ID to avoid conflicts
+                        val newConversation = conversation.copy(id = Uuid.random())
+                        repo.insertConversation(newConversation)
+                        toaster.show("Conversation imported successfully", type = ToastType.Success)
+                        navigateToChatPage(navController, newConversation.id)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    toaster.show("Failed to import: ${e.message}", type = ToastType.Error)
+                }
+            }
+        }
+    }
 
     // 昵称编辑状态
     val nicknameEditState = useEditState<String> { newNickname ->
@@ -96,10 +130,6 @@ fun ChatDrawerContent(
             modifier = Modifier.padding(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            if (settings.displaySetting.showUpdates && !isPlayStore) {
-                UpdateCard(vm)
-            }
-
             // 用户头像和昵称自定义区域
             Row(
                 modifier = Modifier
@@ -180,6 +210,22 @@ fun ChatDrawerContent(
                 },
                 onPin = {
                     vm.updatePinnedStatus(it)
+                },
+                onExport = { conversation ->
+                    scope.launch {
+                        try {
+                            exportToJson(context, conversation)
+                            toaster.show("Conversation exported successfully", type = ToastType.Success)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            toaster.show("Failed to export: ${e.message}", type = ToastType.Error)
+                        }
+                    }
+                },
+                updateCardContent = if (settings.displaySetting.showUpdates && !isPlayStore) {
+                    { UpdateCard(vm) }
+                } else {
+                    null
                 }
             )
 
@@ -212,6 +258,18 @@ fun ChatDrawerContent(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
             ) {
+                DrawerAction(
+                    icon = {
+                        Icon(imageVector = Lucide.Import, contentDescription = "Import")
+                    },
+                    label = {
+                        Text("Import")
+                    },
+                    onClick = {
+                        importLauncher.launch("application/json")
+                    },
+                )
+
                 DrawerAction(
                     icon = {
                         Icon(imageVector = Lucide.Drama, contentDescription = stringResource(R.string.assistant_page_title))

@@ -48,6 +48,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
+import com.composables.icons.lucide.Download
 import com.composables.icons.lucide.History
 import com.composables.icons.lucide.Lucide
 import com.composables.icons.lucide.Pin
@@ -91,7 +92,9 @@ fun ColumnScope.ConversationList(
     onClick: (Conversation) -> Unit = {},
     onDelete: (Conversation) -> Unit = {},
     onRegenerateTitle: (Conversation) -> Unit = {},
-    onPin: (Conversation) -> Unit = {}
+    onPin: (Conversation) -> Unit = {},
+    onExport: (Conversation) -> Unit = {},
+    updateCardContent: (@Composable () -> Unit)? = null
 ) {
     val navController = LocalNavController.current
 
@@ -151,6 +154,13 @@ fun ColumnScope.ConversationList(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
+        // 更新卡片 - 可滚动区域
+        if (updateCardContent != null) {
+            item(key = "update_card") {
+                updateCardContent()
+            }
+        }
+
         if (conversations.itemCount == 0) {
             item {
                 Surface(
@@ -203,6 +213,7 @@ fun ColumnScope.ConversationList(
                         onDelete = onDelete,
                         onRegenerateTitle = onRegenerateTitle,
                         onPin = onPin,
+                        onExport = onExport,
                         modifier = Modifier.animateItem()
                     )
                 }
@@ -272,6 +283,7 @@ private fun ConversationItem(
     onDelete: (Conversation) -> Unit = {},
     onRegenerateTitle: (Conversation) -> Unit = {},
     onPin: (Conversation) -> Unit = {},
+    onExport: (Conversation) -> Unit = {},
     onClick: (Conversation) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -361,6 +373,19 @@ private fun ConversationItem(
                     },
                     leadingIcon = {
                         Icon(Lucide.RefreshCw, null)
+                    }
+                )
+
+                DropdownMenuItem(
+                    text = {
+                        Text(stringResource(R.string.chat_page_export))
+                    },
+                    onClick = {
+                        onExport(conversation)
+                        showDropdownMenu = false
+                    },
+                    leadingIcon = {
+                        Icon(Lucide.Download, null)
                     }
                 )
 

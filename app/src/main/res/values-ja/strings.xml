@@ -218,6 +218,7 @@
   <string name="chat_page_no_conversations">会話がありません</string>
   <string name="chat_page_recent">最近</string>
   <string name="chat_page_regenerate_title">タイトルを再生成</string>
+  <string name="chat_page_export">エクスポート</string>
   <string name="chat_page_save">保存</string>
   <string name="chat_page_scroll_to_bottom">一番下へスクロール</string>
   <string name="chat_page_search_placeholder">会話を検索</string>
@@ -371,6 +372,20 @@
   <string name="setting_display_page_code_block_auto_collapse_title">コードブロックの自動折りたたみ</string>
   <string name="setting_display_page_code_block_auto_wrap_desc">コードブロック内の長い行を自動的に折り返す</string>
   <string name="setting_display_page_code_block_auto_wrap_title">コードブロックの自動折り返し</string>
+  <string name="setting_display_page_input_bar_buttons_title">入力バーボタン</string>
+  <string name="setting_display_page_input_bar_buttons_headline">入力バーのカスタマイズ</string>
+  <string name="setting_display_page_input_bar_buttons_desc">チャット入力バーに表示するボタンを選択</string>
+  <string name="setting_display_page_input_bar_model">モデル</string>
+  <string name="setting_display_page_input_bar_search">検索</string>
+  <string name="setting_display_page_input_bar_thinking">深く考える</string>
+  <string name="setting_display_page_input_bar_mcp">MCP</string>
+  <string name="setting_display_page_input_bar_tools">ツール</string>
+  <string name="setting_display_page_input_bar_translate">翻訳</string>
+  <string name="translate_picker_title">翻訳</string>
+  <string name="translate_picker_source_text">元のテキスト</string>
+  <string name="translate_picker_source_placeholder">翻訳するテキストを入力してください…</string>
+  <string name="translate_picker_translated_text">翻訳結果</string>
+  <string name="translate_picker_translated_placeholder">翻訳結果がここに表示されます…</string>
   <string name="setting_display_page_create_new_conversation_on_start_desc">アプリ起動時に新しい会話を自動作成する</string>
   <string name="setting_display_page_create_new_conversation_on_start_title">起動時に新しいチャット</string>
   <string name="setting_display_page_developer_mode">開発者モード</string>
@@ -736,4 +751,11 @@
   <string name="setting_page_language">言語</string>
   <string name="setting_page_language_desc">アプリの表示言語を設定</string>
   <string name="setting_page_language_system">システムに従う</string>
+
+  <!-- Share Sheet -->
+  <string name="share_sheet_export_options">エクスポートオプション</string>
+  <string name="share_sheet_include_models">モデルリストを含める（%d モデル）</string>
+  <string name="share_sheet_include_multi_key">マルチキー設定を含める（%d キー）</string>
+  <string name="share_sheet_estimated_size">推定サイズ：</string>
+  <string name="share_sheet_size_warning">⚠️ データが大きいため、スキャンが遅くなる可能性があります</string>
 </resources>

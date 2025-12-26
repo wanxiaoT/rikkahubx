@@ -1,14 +1,22 @@
 package me.rerere.rikkahub.ui.pages.setting
 
 import android.os.Build
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -27,12 +35,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.composables.icons.lucide.ChevronDown
+import com.composables.icons.lucide.ChevronUp
+import com.composables.icons.lucide.Languages
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.SearchCheck
+import com.composables.icons.lucide.Server
+import com.composables.icons.lucide.Sparkles
+import com.composables.icons.lucide.Wrench
 import me.rerere.rikkahub.R
 import me.rerere.rikkahub.data.datastore.DisplaySetting
+import me.rerere.rikkahub.data.datastore.InputButtonItem
+import me.rerere.rikkahub.data.datastore.InputButtonType
 import me.rerere.rikkahub.ui.components.nav.BackButton
 import me.rerere.rikkahub.ui.components.richtext.MarkdownBlock
 import me.rerere.rikkahub.ui.components.ui.permission.PermissionManager
@@ -478,6 +497,125 @@ fun SettingDisplayPage(vm: SettingVM = koinViewModel()) {
                 )
             }
 
+            stickyHeader {
+                Text(
+                    text = stringResource(R.string.setting_display_page_input_bar_buttons_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                )
+            }
+
+            item {
+                ListItem(
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                    headlineContent = {
+                        Text(stringResource(R.string.setting_display_page_input_bar_buttons_headline))
+                    },
+                    supportingContent = {
+                        Text(stringResource(R.string.setting_display_page_input_bar_buttons_desc))
+                    },
+                )
+            }
+
+            items(displaySetting.chatInputButtons.buttons, key = { it.type }) { buttonItem ->
+                val index = displaySetting.chatInputButtons.buttons.indexOf(buttonItem)
+                val isFirst = index == 0
+                val isLast = index == displaySetting.chatInputButtons.buttons.size - 1
+
+                ListItem(
+                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                    leadingContent = {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = getButtonIcon(buttonItem.type),
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    },
+                    headlineContent = {
+                        Text(stringResource(getButtonLabel(buttonItem.type)))
+                    },
+                    trailingContent = {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    if (!isFirst) {
+                                        val buttons = displaySetting.chatInputButtons.buttons.toMutableList()
+                                        buttons.removeAt(index)
+                                        buttons.add(index - 1, buttonItem)
+                                        updateDisplaySetting(
+                                            displaySetting.copy(
+                                                chatInputButtons = displaySetting.chatInputButtons.copy(
+                                                    buttons = buttons
+                                                )
+                                            )
+                                        )
+                                    }
+                                },
+                                enabled = !isFirst
+                            ) {
+                                Icon(
+                                    imageVector = Lucide.ChevronUp,
+                                    contentDescription = "Move up",
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+                            IconButton(
+                                onClick = {
+                                    if (!isLast) {
+                                        val buttons = displaySetting.chatInputButtons.buttons.toMutableList()
+                                        buttons.removeAt(index)
+                                        buttons.add(index + 1, buttonItem)
+                                        updateDisplaySetting(
+                                            displaySetting.copy(
+                                                chatInputButtons = displaySetting.chatInputButtons.copy(
+                                                    buttons = buttons
+                                                )
+                                            )
+                                        )
+                                    }
+                                },
+                                enabled = !isLast
+                            ) {
+                                Icon(
+                                    imageVector = Lucide.ChevronDown,
+                                    contentDescription = "Move down",
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+                            Switch(
+                                checked = buttonItem.enabled,
+                                onCheckedChange = { enabled ->
+                                    val buttons = displaySetting.chatInputButtons.buttons.map {
+                                        if (it.type == buttonItem.type) {
+                                            it.copy(enabled = enabled)
+                                        } else {
+                                            it
+                                        }
+                                    }
+                                    updateDisplaySetting(
+                                        displaySetting.copy(
+                                            chatInputButtons = displaySetting.chatInputButtons.copy(
+                                                buttons = buttons
+                                            )
+                                        )
+                                    )
+                                }
+                            )
+                        }
+                    },
+                    modifier = Modifier.animateItem()
+                )
+            }
+
             item {
                 ListItem(
                     headlineContent = {
@@ -517,3 +655,60 @@ fun SettingDisplayPage(vm: SettingVM = koinViewModel()) {
         }
     }
 }
+
+@Composable
+private fun InputBarIconToggle(
+    icon: ImageVector,
+    label: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = modifier
+    ) {
+        FilterChip(
+            selected = checked,
+            onClick = { onCheckedChange(!checked) },
+            label = {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = label,
+                    modifier = Modifier.size(24.dp)
+                )
+            },
+            shape = CircleShape
+        )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall
+        )
+    }
+}
+
+@Composable
+private fun getButtonIcon(type: InputButtonType): ImageVector {
+    return when (type) {
+        InputButtonType.MODEL_SELECTOR -> Lucide.Sparkles
+        InputButtonType.SEARCH_PICKER -> Lucide.SearchCheck
+        InputButtonType.REASONING_BUTTON -> Lucide.Sparkles
+        InputButtonType.MCP_PICKER -> Lucide.Server
+        InputButtonType.LOCAL_TOOLS_PICKER -> Lucide.Wrench
+        InputButtonType.TRANSLATE_PICKER -> Lucide.Languages
+    }
+}
+
+@Composable
+private fun getButtonLabel(type: InputButtonType): Int {
+    return when (type) {
+        InputButtonType.MODEL_SELECTOR -> R.string.setting_display_page_input_bar_model
+        InputButtonType.SEARCH_PICKER -> R.string.setting_display_page_input_bar_search
+        InputButtonType.REASONING_BUTTON -> R.string.setting_display_page_input_bar_thinking
+        InputButtonType.MCP_PICKER -> R.string.setting_display_page_input_bar_mcp
+        InputButtonType.LOCAL_TOOLS_PICKER -> R.string.setting_display_page_input_bar_tools
+        InputButtonType.TRANSLATE_PICKER -> R.string.setting_display_page_input_bar_translate
+    }
+}
+

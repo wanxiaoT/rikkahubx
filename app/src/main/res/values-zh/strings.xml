@@ -226,6 +226,7 @@
   <string name="chat_page_no_conversations">没有对话记录</string>
   <string name="chat_page_recent">最近</string>
   <string name="chat_page_regenerate_title">重新生成标题</string>
+  <string name="chat_page_export">导出</string>
   <string name="chat_page_save">保存</string>
   <string name="chat_page_scroll_to_bottom">滚动到底部</string>
   <string name="chat_page_search_placeholder">搜索聊天记录</string>
@@ -379,6 +380,20 @@
   <string name="setting_display_page_code_block_auto_collapse_title">代码块自动折叠</string>
   <string name="setting_display_page_code_block_auto_wrap_desc">自动换行代码块中的长行</string>
   <string name="setting_display_page_code_block_auto_wrap_title">代码块自动换行</string>
+  <string name="setting_display_page_input_bar_buttons_title">输入栏按钮</string>
+  <string name="setting_display_page_input_bar_buttons_headline">自定义输入栏</string>
+  <string name="setting_display_page_input_bar_buttons_desc">选择在聊天输入栏中显示哪些按钮</string>
+  <string name="setting_display_page_input_bar_model">模型</string>
+  <string name="setting_display_page_input_bar_search">搜索</string>
+  <string name="setting_display_page_input_bar_thinking">深度思考</string>
+  <string name="setting_display_page_input_bar_mcp">MCP</string>
+  <string name="setting_display_page_input_bar_tools">工具</string>
+  <string name="setting_display_page_input_bar_translate">翻译</string>
+  <string name="translate_picker_title">翻译</string>
+  <string name="translate_picker_source_text">源文本</string>
+  <string name="translate_picker_source_placeholder">输入要翻译的文本…</string>
+  <string name="translate_picker_translated_text">翻译结果</string>
+  <string name="translate_picker_translated_placeholder">翻译结果将显示在这里…</string>
   <string name="setting_display_page_create_new_conversation_on_start_desc">当应用启动时，自动创建一个新的对话</string>
   <string name="setting_display_page_create_new_conversation_on_start_title">启动时新建对话</string>
   <string name="setting_display_page_developer_mode">开发者模式</string>
@@ -848,4 +863,11 @@
   <string name="create">创建</string>
   <string name="save">保存</string>
   <string name="close">关闭</string>
+
+  <!-- Share Sheet -->
+  <string name="share_sheet_export_options">导出选项</string>
+  <string name="share_sheet_include_models">包含模型列表（%d 个模型）</string>
+  <string name="share_sheet_include_multi_key">包含多 Key 配置（%d 个 Key）</string>
+  <string name="share_sheet_estimated_size">预计大小：</string>
+  <string name="share_sheet_size_warning">⚠️ 数据较大，扫码可能较慢</string>
 </resources>

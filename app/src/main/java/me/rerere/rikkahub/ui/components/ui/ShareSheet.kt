@@ -6,10 +6,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +20,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,10 +54,20 @@ import me.rerere.rikkahub.ui.context.LocalToaster
 import me.rerere.rikkahub.utils.JsonInstant
 import me.rerere.rikkahub.utils.getActivity
 import me.rerere.rikkahub.utils.saveImageToDCIM
+import me.rerere.rikkahub.utils.ExportOptions
+import me.rerere.rikkahub.utils.prepareForExport
+import me.rerere.rikkahub.utils.compressData
+import me.rerere.rikkahub.utils.decompressData
+import me.rerere.rikkahub.utils.generateVersionFlags
+import me.rerere.rikkahub.utils.parseVersionFlags
+import me.rerere.rikkahub.utils.estimateQRCodeSize
+import me.rerere.rikkahub.utils.checkQRCodeSize
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
+@OptIn(ExperimentalEncodingApi::class)
 @Composable
 fun ShareSheet(
     state: ShareSheetState,
@@ -63,7 +77,39 @@ fun ShareSheet(
     val activity = context.getActivity()
     val scope = rememberCoroutineScope()
     val density = LocalDensity.current
-    val qrCodeValue = state.currentProvider?.encodeForShare() ?: ""
+
+    // 导出选项状态
+    var includeModels by remember { mutableStateOf(false) }
+    var includeMultiKey by remember { mutableStateOf(false) }
+
+    // 根据当前状态计算导出选项
+    val exportOptions = remember(includeModels, includeMultiKey) {
+        ExportOptions(
+            includeModels = includeModels,
+            includeMultiKey = includeMultiKey,
+            useCompression = true
+        )
+    }
+
+    // 生成二维码值
+    val qrCodeValue by remember(state.currentProvider, exportOptions) {
+        derivedStateOf {
+            state.currentProvider?.encodeForShare(exportOptions) ?: ""
+        }
+    }
+
+    // 估算数据大小
+    val sizeInfo = remember(qrCodeValue) {
+        derivedStateOf {
+            if (qrCodeValue.isEmpty()) {
+                Pair(false, "0B")
+            } else {
+                checkQRCodeSize(qrCodeValue.length)
+            }
+        }
+    }
+    val isTooLarge = sizeInfo.value.first
+    val sizeStr = sizeInfo.value.second
 
     // Generate QR code bitmap for preview (simple version)
     val qrCodeWriter = remember { QRCodeWriter() }
@@ -215,6 +261,99 @@ fun ShareSheet(
                     }
                 }
 
+                // 导出选项
+                state.currentProvider?.let { provider ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.share_sheet_export_options),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+
+                        // 包含模型列表选项
+                        if (provider.models.isNotEmpty()) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Checkbox(
+                                    checked = includeModels,
+                                    onCheckedChange = { includeModels = it }
+                                )
+                                Text(
+                                    text = stringResource(
+                                        R.string.share_sheet_include_models,
+                                        provider.models.size
+                                    ),
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+                        }
+
+                        // 包含多 Key 配置选项
+                        if (provider.multiKeyEnabled && !provider.apiKeys.isNullOrEmpty()) {
+                            val apiKeysCount = provider.apiKeys?.size ?: 0
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Checkbox(
+                                    checked = includeMultiKey,
+                                    onCheckedChange = { includeMultiKey = it }
+                                )
+                                Text(
+                                    text = stringResource(
+                                        R.string.share_sheet_include_multi_key,
+                                        apiKeysCount
+                                    ),
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+                        }
+
+                        // 数据大小显示
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.share_sheet_estimated_size),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                text = sizeStr,
+                                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                                color = if (isTooLarge) {
+                                    MaterialTheme.colorScheme.error
+                                } else {
+                                    MaterialTheme.colorScheme.primary
+                                }
+                            )
+                        }
+
+                        // 大小警告
+                        if (isTooLarge) {
+                            Text(
+                                text = stringResource(R.string.share_sheet_size_warning),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.error,
+                                modifier = Modifier.padding(start = 48.dp)
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 // 显示带文字的二维码预览
                 state.currentProvider?.let { provider ->
                     QRCodeWithProviderInfo(
@@ -292,27 +431,71 @@ private fun QRCodeWithProviderInfo(
     }
 }
 
-fun ProviderSetting.encodeForShare(): String {
+@OptIn(ExperimentalEncodingApi::class)
+fun ProviderSetting.encodeForShare(options: ExportOptions = ExportOptions()): String {
     return buildString {
         append("ai-provider:")
-        append("v1:")
+        append("v2:")
 
-        val value = JsonInstant.encodeToString(this@encodeForShare.copyProvider(models = emptyList()))
-        append(Base64.encode(value.encodeToByteArray()))
+        // 生成版本标志
+        val flags = generateVersionFlags(options)
+        append(flags)
+        append(":")
+
+        // 准备导出数据
+        val preparedProvider = this@encodeForShare.prepareForExport(options)
+        val jsonString = JsonInstant.encodeToString(preparedProvider)
+        val jsonBytes = jsonString.encodeToByteArray()
+
+        // 压缩或不压缩
+        val dataBytes = if (options.useCompression) {
+            compressData(jsonBytes)
+        } else {
+            jsonBytes
+        }
+
+        // Base64 编码
+        append(Base64.encode(dataBytes))
     }
 }
 
+@OptIn(ExperimentalEncodingApi::class)
 fun decodeProviderSetting(value: String): ProviderSetting {
-    require(value.startsWith("ai-provider:v1:")) { "Invalid provider setting string" }
+    // 检查是否为 v1 格式（旧格式，向后兼容）
+    if (value.startsWith("ai-provider:v1:")) {
+        val base64Str = value.removePrefix("ai-provider:v1:")
+        val jsonBytes = Base64.decode(base64Str)
+        val jsonStr = jsonBytes.decodeToString()
+        return JsonInstant.decodeFromString<ProviderSetting>(jsonStr)
+    }
 
-    // 去掉前缀
-    val base64Str = value.removePrefix("ai-provider:v1:")
+    // 检查是否为 v2 格式（新格式）
+    if (value.startsWith("ai-provider:v2:")) {
+        val parts = value.removePrefix("ai-provider:v2:").split(":", limit = 2)
 
-    // Base64解码
-    val jsonBytes = Base64.decode(base64Str)
-    val jsonStr = jsonBytes.decodeToString()
+        require(parts.size == 2) { "Invalid v2 provider setting format" }
 
-    return JsonInstant.decodeFromString<ProviderSetting>(jsonStr)
+        val flags = parts[0]
+        val base64Data = parts[1]
+
+        // 解析标志
+        val options = parseVersionFlags(flags)
+
+        // Base64 解码
+        val dataBytes = Base64.decode(base64Data)
+
+        // 解压或不解压
+        val jsonBytes = if (options.useCompression) {
+            decompressData(dataBytes)
+        } else {
+            dataBytes
+        }
+
+        val jsonStr = jsonBytes.decodeToString()
+        return JsonInstant.decodeFromString<ProviderSetting>(jsonStr)
+    }
+
+    throw IllegalArgumentException("Unsupported provider setting format")
 }
 
 class ShareSheetState {

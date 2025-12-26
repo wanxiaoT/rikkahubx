@@ -134,10 +134,17 @@ fun SettingProviderPage(vm: SettingVM = koinViewModel()) {
                             AutoAIIcon("AiHubMix")
                         }
                     }
-                    ImportProviderButton {
+                    ImportProviderButton { importedProvider ->
+                        // 检查是否已存在相同 ID 的提供商，如果存在则生成新 ID
+                        val providerToAdd = if (settings.providers.any { it.id == importedProvider.id }) {
+                            importedProvider.copyProvider(id = kotlin.uuid.Uuid.random())
+                        } else {
+                            importedProvider
+                        }
+
                         vm.updateSettings(
                             settings.copy(
-                                providers = listOf(it) + settings.providers
+                                providers = listOf(providerToAdd) + settings.providers
                             )
                         )
                     }
