@@ -1,10 +1,12 @@
-[简体中文](README.md) | [繁體中文（中國台灣）](README_ZH_TW.md) | English
+[简体中文](README.md) | [繁體中文（中國台灣）](README_ZH_TW.md) | [繁體中文（中國香港）](README_HK.md) | [繁體中文（中國澳門）](README_ZH_MO.MD) | English
 
 <div align="center">
   <img src="docs/icon.png" alt="App Icon" width="100" />
   <h1>RikkaHubX</h1>
 
 > [!WARNING] This is NOT an officially supported version by RikkaHub!
+
+// 2025/12/26 Note: May not be updated anymore, feeling down
 
 For content related to the original project, please visit [RikkaHub-Github](https://github.com/rikkahub/rikkahub)
 

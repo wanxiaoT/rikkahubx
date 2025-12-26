@@ -1,10 +1,12 @@
-[简体中文](README.md) | 繁體中文（中國台灣） | [English](README_EN.md)
+[简体中文](README.md) | 繁體中文（中國台灣） | [繁體中文（中國香港）](README_HK.md) | [繁體中文（中國澳門）](README_ZH_MO.MD) | [English](README_EN.md)
 
 <div align="center">
   <img src="docs/icon.png" alt="App 圖示" width="100" />
   <h1>RikkaHubX</h1>
 
 > [!WARNING] 這不是受到 RikkaHub官方 支援的版本！
+
+// 2025/12/26記：可能不會更新了，心情很差
 
 與原專案有關的內容請前往[RikkaHub-Github](https://github.com/rikkahub/rikkahub)
 

@@ -1,4 +1,4 @@
-简体中文 | [繁體中文（中國台灣）](README_ZH_TW.md) | [English](README_EN.md)
+简体中文 | [繁體中文（中國台灣）](README_ZH_TW.md) | [繁體中文（中國香港）](README_HK.md) | [繁體中文（中國澳門）](README_ZH_MO.MD) | [English](README_EN.md)
 
 <div align="center">
   <img src="docs/icon.png" alt="App 图标" width="100" />
